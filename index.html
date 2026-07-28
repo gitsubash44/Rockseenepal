@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rocksee Nepal — 24-Hour Liquor Delivery, Kathmandu</title>
+<meta name="description" content="Rocksee Nepal delivers beer, whiskey, wine, and spirits across Kathmandu, 24 hours a day. Order on WhatsApp or by phone.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+
+<!-- Age verification gate -->
+<div id="agegate">
+  <svg class="gate-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    
+  </svg>
+  <div class="glow display">18+ Only</div>
+  <p>Rocksee Nepal delivers alcohol in Kathmandu. You must be of legal drinking age in Nepal to enter this site.</p>
+  <div class="gate-btns">
+    <button class="btn btn-primary" onclick="enterSite()">I am 18 or older — Enter</button>
+    <a class="btn btn-ghost" href="https://www.google.com">I am under 18 — Exit</a>
+  </div>
+</div>
+
+<div id="site">
+
+<header>
+  <div class="logo">
+    <a href="#site" style="display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit;">
+      <img src="rockseenepal.jpg" alt="Rocksee Nepal logo" style="width:48px; height:auto; border-radius:6px; object-fit:cover;">
+      <div style="display:flex; flex-direction:column; line-height:1.1;">
+        <span style="font-family:'Anton',sans-serif; font-size:1rem; color:var(--cream);">Rocksee Nepal</span>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.14em; color:var(--amber); text-transform:uppercase;">24-hour delivery</span>
+      </div>
+    </a>
+  </div>
+  <div class="nav-links">
+    <nav>
+      <a href="/menu.html">Menu</a>
+      <a href="#how">How it works</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#delivery">Delivery</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-primary btn-sm order-link" href="#order">Order Now</a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/menu.html">Menu</a>
+  <a href="#how">How it works</a>
+  <a href="#reviews">Reviews</a>
+  <a href="#delivery">Delivery</a>
+  <a href="#faq">FAQ</a>
+  <a href="#order" class="btn btn-primary" style="margin-top:10px;">Order Now</a>
+</div>
+
+<section class="hero" style="background:radial-gradient(circle at top right, rgba(232,163,61,0.08), transparent 30%), radial-gradient(circle at bottom left, rgba(255,71,87,0.05), transparent 25%);">
+  <div>
+    <div class="badge-live"><span class="dot"></span> OPEN NOW — 24 HOURS, KATHMANDU</div>
+    <h1 class="hero-title display">Your bottle,<br>at your door.<br><span class="amber">Any hour.</span></h1>
+    <p class="sub">Kathmandu's round-the-clock liquor delivery. Beer, whiskey, wine, and spirits — ordered in minutes, delivered to your gate, day or night.</p>
+    <p style="margin-top:18px; color:var(--amber); font-family:'JetBrains Mono',monospace; font-size:0.82rem; letter-spacing:0.14em; text-transform:uppercase;">No minimum order. Fast delivery across Kathmandu.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="https://wa.me/9768756185" target="_blank">Order on WhatsApp</a>
+      <a class="btn btn-ghost" href="tel:9768756185">Call 976-8756185</a>
+    </div>
+    <div class="hero-meta">
+      <div><div class="num">4.9 ★</div><div class="lbl">118 Reviews</div></div>
+      <div><div class="num">24 / 7</div><div class="lbl">Always Open</div></div>
+      <div><div class="num">M8GH+8X</div><div class="lbl">Kathmandu 44600</div></div>
+    </div>
+  </div>
+  <div class="sign-wrap">
+    <div class="pour-card">
+      <svg class="pour-svg" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M28 14H92L82 108C80.5 118 71 126 60 126C49 126 39.5 118 38 108L28 14Z" stroke="#E8A33D" stroke-width="2.2"/>
+        <path d="M60 126V134" stroke="#E8A33D" stroke-width="2.2"/>
+        <path d="M42 134H78" stroke="#E8A33D" stroke-width="2.2"/>
+        <clipPath id="glassClip">
+          <path d="M28 14H92L82 108C80.5 118 71 126 60 126C49 126 39.5 118 38 108L28 14Z"/>
+        </clipPath>
+        <g clip-path="url(#glassClip)">
+          <rect class="liquid" x="26" y="40" width="68" height="90" fill="#E8A33D" opacity="0.85"/>
+          <rect x="26" y="40" width="68" height="4" fill="#F5C878" opacity="0.6"/>
+        </g>
+        <circle class="pour-drip" cx="60" cy="6" r="2.4" fill="#E8A33D"/>
+      </svg>
+      <div class="word">OPEN</div>
+      <div class="word red">24 HRS</div>
+      <div class="caption">// never last call</div>
+    </div>
+  </div>
+</section>
+
+<div class="rail" aria-hidden="true">
+  <div class="rail-track">
+    <span><b>WHISKEY</b> · <b>BEER</b> · <b>WINE</b> · <b>VODKA</b> · <b>RUM</b> · <b>GIN</b> · <b>TEQUILA</b> · <b>MIXERS</b></span>
+    <span><b>WHISKEY</b> · <b>BEER</b> · <b>WINE</b> · <b>VODKA</b> · <b>RUM</b> · <b>GIN</b> · <b>TEQUILA</b> · <b>MIXERS</b></span>
+  </div>
+</div>
+
+<section id="categories">
+  <div class="eyebrow reveal">// The Menu</div>
+  <h2 class="section-title reveal">Whatever's calling your name tonight.</h2>
+  <p class="section-sub reveal">A working price list to give you a sense of range — message us for the full catalogue and current stock.</p>
+
+  <div class="menu-tabs reveal">
+    <button class="tab-btn active" data-tab="whiskey">Whiskey</button>
+    <button class="tab-btn" data-tab="beer">Beer</button>
+    <button class="tab-btn" data-tab="wine">Wine</button>
+    <button class="tab-btn" data-tab="spirits">Spirits &amp; Mixers</button>
+  </div>
+
+    <div class="notice-box" style="background: linear-gradient(135deg, #ff7f50 0%, #ff5252 100%); color: #fff; padding: 24px 28px; border-radius: 18px; text-align: center; margin: 28px 0; box-shadow: 0 18px 32px rgba(0, 0, 0, 0.12); position: relative; overflow: hidden;">
+    <div style="position: absolute; top: -20px; right: -20px; width: 110px; height: 110px; background: rgba(255, 255, 255, 0.14); border-radius: 50%;"></div>
+    <div style="position: absolute; bottom: -20px; left: -20px; width: 130px; height: 130px; background: rgba(255, 255, 255, 0.14); border-radius: 50%;"></div>
+    <div style="position: relative; z-index: 1;">
+      <h1 class="">Browse the full menu.</h1>
+      <p style="font-size: 1.05rem; font-weight: 500; margin: 0 0 16px; line-height: 1.6;" class="section-copy">See every available drink, mixer, and snack in one place. Tap below to view the complete selection.</p>
+      <a href="https://github.com/gitsubash44" target="_blank" rel="noopener" class="btn" style="background: #fff; color: #111; text-decoration: none; padding: 12px 24px; border-radius: 999px; display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-family: 'SST', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);">
+        <img src="https://static.vecteezy.com/system/resources/previews/015/218/298/original/restaurant-menu-icon-outline-cafe-food-vector.jpg" alt="menu" style="width: 20px; height: 20px;"> Full Menu →
+      </a>
+    </div>
+  </div>
+
+  <div class="menu-grid reveal">
+
+    <div class="menu-panel active" data-panel="whiskey">
+      <div class="menu-item">
+        <span class="menu-badge">Popular</span>
+        <div class="menu-img"><img src="img/old durbar ceramic Nepali Whisky.jpg" alt="Old Durbar 15 Years Ceramic Edition" loading="lazy"></div>
+        <div class="name">Old Durbar 15 Years</div>
+        <div class="desc">Ceramic collector's bottle, blended scotch whisky.</div>
+        <div class="menu-item-footer">
+          <span class="price">NPR 4,500</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Old%20Durbar%2015%20Years%20(Ceramic)" target="_blank" aria-label="Order Old Durbar 15 Years on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img"><img src="img/Bandipur Blended Malt Scotch Whisky - 750ML.jpg" alt="Bandipur Blended Malt Scotch Whisky" loading="lazy"></div>
+        <div class="name">Bandipur Blended Malt</div>
+        <div class="desc">Scotch whisky, matured and bottled in small batches.</div>
+        <div class="menu-item-footer">
+          <span class="price">NPR 3,200</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Bandipur%20Blended%20Malt%20Scotch%20Whisky" target="_blank" aria-label="Order Bandipur on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img"><img src="img/old durbar ceramic Nepali Whisky.jpg" alt="Old Durbar Black Chimney Reserve Whisky" loading="lazy"></div>
+        <div class="name">Old Durbar Black Chimney</div>
+        <div class="desc">Blended reserve, finished in oloroso sherry barrels.</div>
+        <div class="menu-item-footer">
+          <span class="price">NPR 1,450</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Old%20Durbar%20Black%20Chimney" target="_blank" aria-label="Order Old Durbar Black Chimney on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="menu-more">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        <p>Looking for a specific label?<br>We carry more than what's shown here.</p>
+        <a class="btn btn-ghost btn-sm" href="https://wa.me/9768756185?text=Hi%2C%20do%20you%20have%20other%20whiskey%20labels%20available%3F" target="_blank">Ask on WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="menu-panel" data-panel="beer">
+      <div class="menu-item">
+        <span class="menu-badge">Popular</span>
+        <div class="menu-img"><img src="img/Gorkha-Strong-Can-500ML.jpg" alt="Gorkha Strong Beer Can, 500ml" loading="lazy"></div>
+        <div class="name">Gorkha Strong (Can)</div>
+        <div class="desc">500ml can, Nepal's bold local lager.</div>
+        <div class="menu-item-footer">
+          <span class="price">NPR 320</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Gorkha%20Strong%20Can" target="_blank" aria-label="Order Gorkha Strong Can on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img"><img src="img/Gorkha Strong.png" alt="Gorkha Strong Beer Bottle" loading="lazy"></div>
+        <div class="name">Gorkha Strong (Bottle)</div>
+        <div class="desc">650ml bottle, cold on delivery.</div>
+        <div class="menu-item-footer">
+          <span class="price">NPR 350</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Gorkha%20Strong%20Bottle" target="_blank" aria-label="Order Gorkha Strong Bottle on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img"><img src="img/tuborg can.jpg" alt="Tuborg Green Beer Can" loading="lazy"></div>
+        <div class="name">Tuborg Green (Can)</div>
+        <div class="desc">500ml can, crisp Danish-style lager.</div>
+        <div class="menu-item-footer">
+          <span class="price">NPR 340</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Tuborg%20Green%20Can" target="_blank" aria-label="Order Tuborg Can on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img"><img src="img/Tubirg.jpg" alt="Tuborg Green Beer Bottle" loading="lazy"></div>
+        <div class="name">Tuborg Green (Bottle)</div>
+        <div class="desc">650ml bottle, delivered cold.</div>
+        <div class="menu-item-footer">
+          <span class="price">NPR 380</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Tuborg%20Green%20Bottle" target="_blank" aria-label="Order Tuborg Bottle on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img"><img src="img/Kingfisher_Premium_Beer_From_India.jpg" alt="Kingfisher Premium Beer" loading="lazy"></div>
+        <div class="name">Kingfisher Premium</div>
+        <div class="desc">330ml bottle, imported from India.</div>
+        <div class="menu-item-footer">
+          <span class="price">NPR 400</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Kingfisher%20Premium" target="_blank" aria-label="Order Kingfisher Premium on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="menu-more">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        <p>Ordering for a group?<br>Ask about mixed crates and case pricing.</p>
+        <a class="btn btn-ghost btn-sm" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20a%20mixed%20beer%20crate%20for%20a%20group" target="_blank">Ask on WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="menu-panel" data-panel="wine">
+      <div class="menu-item">
+        <div class="menu-img"><img src="img/Manag Valley.jpg" alt="Manang Valley Premium Wine" loading="lazy"></div>
+        <div class="name">Manang Valley Premium</div>
+        <div class="desc">Light, food-friendly white — locally produced.</div>
+        <div class="menu-item-footer">
+          <span class="price">NPR 2,800</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Manang%20Valley%20Premium%20Wine" target="_blank" aria-label="Order Manang Valley wine on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="menu-item">
+        <span class="menu-badge">Popular</span>
+        <div class="menu-img"><img src="img/Robertson-Winery-Natural-Sweet-Red-750ML.jpg" alt="Robertson Winery Natural Sweet Red" loading="lazy"></div>
+        <div class="name">Robertson Natural Sweet Red</div>
+        <div class="desc">750ml, smooth and sweet — a dinner favorite.</div>
+        <div class="menu-item-footer">
+          <span class="price">NPR 3,200</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Robertson%20Natural%20Sweet%20Red" target="_blank" aria-label="Order Robertson wine on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="menu-more">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        <p>Want something sparkling or a specific vintage?<br>Message us your preference.</p>
+        <a class="btn btn-ghost btn-sm" href="https://wa.me/9768756185?text=Hi%2C%20do%20you%20have%20sparkling%20wine%20available%3F" target="_blank">Ask on WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="menu-panel" data-panel="spirits">
+      <div class="menu-item">
+        <div class="menu-img"><img src="img/vodka.jpg" alt="Vodka bottle" loading="lazy"></div>
+        <div class="name">Vodka (750ml)</div>
+        <div class="desc">Local and imported options available.</div>
+        <div class="menu-item-footer">
+          <span class="price">From NPR 1,500</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Vodka" target="_blank" aria-label="Order Vodka on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img"><img src="img/rum.jpg" alt="Rum bottle" loading="lazy"></div>
+        <div class="name">Rum (750ml)</div>
+        <div class="desc">Dark and white, spiced on request.</div>
+        <div class="menu-item-footer">
+          <span class="price">From NPR 1,400</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Rum" target="_blank" aria-label="Order Rum on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img"><img src="img/gin.jpg" alt="Gin bottle" loading="lazy"></div>
+        <div class="name">Gin (750ml)</div>
+        <div class="desc">London dry and local craft options.</div>
+        <div class="menu-item-footer">
+          <span class="price">From NPR 2,000</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Gin" target="_blank" aria-label="Order Gin on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img"><img src="img/mixers-soda.jpg" alt="Mixers and soda" loading="lazy"></div>
+        <div class="name">Mixers &amp; Soda</div>
+        <div class="desc">Tonic, cola, soda water, juice.</div>
+        <div class="menu-item-footer">
+          <span class="price">From NPR 120</span>
+          <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20mixers" target="_blank" aria-label="Order mixers on WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <p class="menu-note reveal">// Product photos are for reference — prices and stock can change. Confirm your total on WhatsApp before we dispatch.</p>
+
+</section>
+
+
+<section>
+  <div class="eyebrow reveal">// Why People Order From Us</div>
+  <h2 class="section-title reveal">Built for the hours other shops are closed.</h2>
+  <div class="trust-strip reveal">
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4M12 3l7 4v5c0 5-3.5 8.5-7 9-3.5-.5-7-4-7-9V7l7-4z"/></svg>
+      <div><h4>Licensed &amp; verified</h4><p>Operating as a registered delivery service in Kathmandu.</p></div>
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1 3-6z"/></svg>
+      <div><h4>ID checked on delivery</h4><p>Riders confirm you're of legal drinking age at the door.</p></div>
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      <div><h4>~25 min response</h4><p>Average time from message sent to order confirmed.</p></div>
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg>
+      <div><h4>Cash or digital</h4><p>Pay on delivery, in cash or by wallet transfer.</p></div>
+    </div>
+  </div>
+  
+</section>
+
+<section id="how">
+  <div class="eyebrow reveal">// How It Works</div>
+  <h2 class="section-title reveal">Three steps between you and your order.</h2>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="n mono">01</div>
+      <h3>Message or call</h3>
+      <p>Send your order over WhatsApp or call us directly. Tell us what you want and where you are.</p>
+    </div>
+    <div class="step reveal">
+      <div class="n mono">02</div>
+      <h3>We confirm</h3>
+      <p>We confirm your order, price, and delivery time — usually within minutes, any hour of the day.</p>
+    </div>
+    <div class="step reveal">
+      <div class="n mono">03</div>
+      <h3>It arrives</h3>
+      <p>Our rider brings it straight to your door within Kathmandu. Pay on delivery.</p>
+    </div>
+  </div>
+</section>
+
+<section id="reviews">
+  <div class="eyebrow reveal">// What People Say</div>
+  <h2 class="section-title reveal">Kathmandu's highest-rated delivery service.</h2>
+  <div class="review-panel reveal">
+    <div>
+      <div class="rating-big">4.9</div>
+      <div class="stars">★★★★★</div>
+      <div class="count">Based on 118 Google reviews</div>
+    </div>
+    <div>
+      <div class="carousel">
+        <div class="carousel-slide active">
+          <p class="quote">"Fast, reliable, and open even at 2am when nowhere else is. Rocksee Nepal has become our go-to for last-minute orders."</p>
+          <div class="quote-author">— Verified Google review</div>
+        </div>
+        <div class="carousel-slide">
+          <p class="quote">"Ordered on WhatsApp, got a confirmation in minutes, and the rider found our place with no trouble at all."</p>
+          <div class="quote-author">— Verified Google review</div>
+        </div>
+        <div class="carousel-slide">
+          <p class="quote">"Good prices, cold beer, and they actually checked ID at the door. Exactly what a delivery service should be."</p>
+          <div class="quote-author">— Verified Google review</div>
+        </div>
+      </div>
+      <div class="carousel-dots">
+        <button class="active" aria-label="Show review 1"></button>
+        <button aria-label="Show review 2"></button>
+        <button aria-label="Show review 3"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="delivery">
+  <div class="eyebrow reveal">// The Details</div>
+  <h2 class="section-title reveal">Hours, location, and how to reach us.</h2>
+  <div class="info-grid reveal">
+    <div class="info-card">
+      <h3>Hours &amp; Contact</h3>
+      <ul>
+        <li><span>Hours</span><span>Open 24 Hours</span></li>
+        <li><span>Phone</span><span>976-8756185</span></li>
+        <li><span>Website</span><span>rockseenepal.com</span></li>
+        <li><span>Instagram</span><span>@rockseenepal</span></li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>Delivery Zones</h3>
+      <p style="color:var(--muted); font-size:0.9rem; margin-bottom:6px;">Currently covering central Kathmandu, including:</p>
+      <div class="zone-chips">
+        <span>Kathmandu 44600</span>
+        <span>New Baneshwor</span>
+        <span>Thamel</span>
+        <span>Lazimpat</span>
+        <span>Koteshwor</span>
+        <span>Ask about your area</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="eyebrow reveal">// Good To Know</div>
+  <h2 class="section-title reveal">Frequently asked questions.</h2>
+  <div class="faq reveal">
+    <details open>
+      <summary>How do I place an order? <span class="plus">+</span></summary>
+      <p class="faq-a">Message us on WhatsApp or call 976-8756185 with what you'd like and your delivery address. We'll confirm the price and estimated time before dispatching.</p>
+    </details>
+    <details>
+      <summary>Do you check ID on delivery? <span class="plus">+</span></summary>
+      <p class="faq-a">Yes. Our riders may ask for identification to confirm you're of legal drinking age in Nepal before handing over your order.</p>
+    </details>
+    <details>
+      <summary>What areas do you deliver to? <span class="plus">+</span></summary>
+      <p class="faq-a">We currently cover central Kathmandu, including the 44600 area and nearby neighborhoods. Message us your location and we'll confirm if we can reach you.</p>
+    </details>
+    <details>
+      <summary>How do I pay? <span class="plus">+</span></summary>
+      <p class="faq-a">Cash on delivery or digital wallet transfer — whichever is easier for you. We'll confirm the total before your order leaves.</p>
+    </details>
+    <details>
+      <summary>Are you really open 24 hours? <span class="plus">+</span></summary>
+      <p class="faq-a">Yes, every day of the week. Late-night and early-morning orders are some of the most common ones we get.</p>
+    </details>
+  </div>
+</section>
+
+<section class="cta-band" id="order">
+  <div class="eyebrow reveal" style="justify-content:center; display:flex;">// Ready When You Are</div>
+  <h2 class="display reveal">It's always the<br><span class="amber">right hour</span> somewhere.</h2>
+  <div class="hero-ctas reveal" style="justify-content:center;">
+    <a class="btn btn-primary" href="https://wa.me/9768756185" target="_blank">Order on WhatsApp</a>
+    <a class="btn btn-ghost" href="tel:9768756185">Call 976-8756185</a>
+  </div>
+</section>
+
+<p class="disclaimer">Rocksee Nepal is a licensed alcohol delivery service. We deliver only to customers of legal drinking age in Nepal and reserve the right to request ID upon delivery. Please drink responsibly.</p>
+
+<footer>
+  <div>© <span id="year"></span> Rocksee Nepal. All rights reserved.</div>
+  <div><a href="https://www.instagram.com/rockseenepal/" target="_blank">Instagram</a> &nbsp;·&nbsp; <a href="tel:9768756185">976-8756185</a> &nbsp;·&nbsp; Kathmandu 44600</div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/9768756185" target="_blank" aria-label="Order on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.08L2 22l5.08-1.32A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.2-1.77 1.24-.45.05-.9.24-3.02-.63-2.56-1.05-4.2-3.63-4.33-3.8-.13-.17-1.03-1.37-1.03-2.61 0-1.24.65-1.85.88-2.1.22-.24.5-.3.66-.3.17 0 .33 0 .48.01.15.01.36-.06.56.43.22.53.73 1.83.8 1.96.06.13.1.28.02.45-.08.17-.13.28-.26.43-.13.15-.27.34-.39.46-.13.13-.26.27-.11.53.15.26.67 1.1 1.44 1.79 1 .89 1.83 1.16 2.09 1.29.26.13.41.11.56-.07.15-.17.65-.76.82-1.02.17-.26.35-.22.58-.13.24.09 1.51.71 1.77.84.26.13.43.19.5.3.06.11.06.63-.16 1.25z"/></svg>
+</a>
+
+<div class="sticky-order" id="stickyOrder">
+  <div class="txt"><b>Ready to order?</b>Open 24 hours across Kathmandu.</div>
+  <a class="btn btn-primary btn-sm" href="https://wa.me/9768756185" target="_blank">WhatsApp</a>
+</div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

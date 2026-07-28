@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menu — Rocksee Nepal | 24-Hour Liquor Delivery</title>
+    <meta name="description" content="Browse Rocksee Nepal's full menu of whiskey, beer, wine, spirits, and mixers. Order 24/7 in Kathmandu." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+        /* ============================================================
+           ROCKSEE NEPAL — MENU PAGE STYLES
+           ============================================================ */
+        :root {
+            --bg: #0A0D16;
+            --bg-panel: #10131f;
+            --bg-panel2: #151a2c;
+            --amber: #E8A33D;
+            --amber-deep: #B97324;
+            --amber-dim: #8a6524;
+            --red: #FF4757;
+            --cream: #F5F1E6;
+            --muted: #8891A8;
+            --line: #232a42;
+            --radius: 8px;
+            --ease: cubic-bezier(.22, .7, .24, 1);
+            --shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--cream);
+            font-family: 'Manrope', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            padding-bottom: 120px;
+        }
+
+        .display {
+            font-family: 'Anton', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.01em;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        ::selection {
+            background: var(--amber);
+            color: #12100a;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--amber);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
+        /* Ambient background glow */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(ellipse 900px 550px at 12% -8%, rgba(232, 163, 61, 0.08), transparent 60%),
+                radial-gradient(ellipse 750px 550px at 108% 15%, rgba(255, 71, 87, 0.06), transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ============================================================
+           HEADER
+           ============================================================ */
+        .menu-header {
+            position: sticky;
+            top: 0;
+            z-index: 80;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 6vw;
+            background: rgba(10, 13, 22, 0.92);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .menu-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .menu-header .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .menu-header .logo .brand {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.1rem;
+            color: var(--cream);
+            line-height: 1.1;
+        }
+
+        .menu-header .logo .brand span {
+            color: var(--amber);
+        }
+
+        .menu-header .logo .sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.14em;
+            color: var(--amber);
+            text-transform: uppercase;
+            display: block;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .header-actions .back-btn {
+            font-size: 0.78rem;
+            color: var(--muted);
+            padding: 8px 16px;
+            border: 1px solid var(--line);
+            border-radius: 100px;
+            transition: all 0.2s var(--ease);
+            font-family: 'Manrope', sans-serif;
+            font-weight: 600;
+        }
+
+        .header-actions .back-btn:hover {
+            border-color: var(--amber-dim);
+            color: var(--cream);
+        }
+
+        .header-actions .whatsapp-btn {
+            background: var(--amber);
+            color: #12100a;
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: all 0.2s var(--ease);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-actions .whatsapp-btn:hover {
+            transform: scale(1.04);
+            box-shadow: 0 0 28px rgba(232, 163, 61, 0.4);
+        }
+
+        .header-actions .whatsapp-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        @media (max-width: 600px) {
+            .menu-header .logo .brand {
+                font-size: 0.9rem;
+            }
+            .header-actions .back-btn span {
+                display: none;
+            }
+            .header-actions .whatsapp-btn {
+                padding: 8px 14px;
+                font-size: 0.7rem;
+            }
+            .header-actions .whatsapp-btn span {
+                display: none;
+            }
+        }
+
+        /* ============================================================
+           HERO SECTION — MENU
+           ============================================================ */
+        .menu-hero {
+            padding: 60px 6vw 40px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-hero .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--amber);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .menu-hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            color: var(--cream);
+            line-height: 1.05;
+        }
+
+        .menu-hero h1 .highlight {
+            color: var(--amber);
+            text-shadow: 0 0 30px rgba(232, 163, 61, 0.3);
+        }
+
+        .menu-hero p {
+            color: var(--muted);
+            max-width: 560px;
+            margin: 16px auto 0;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* ============================================================
+           SEARCH & FILTERS
+           ============================================================ */
+        .menu-controls {
+            padding: 0 6vw 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-controls .controls-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            align-items: center;
+            justify-content: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px 14px 48px;
+            background: var(--bg-panel);
+            border: 1px solid var(--line);
+            border-radius: 100px;
+            color: var(--cream);
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.9rem;
+            transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+        }
+
+        .search-box input::placeholder {
+            color: var(--muted);
+        }
+
+        .search-box input:focus {
+            border-color: var(--amber);
+            box-shadow: 0 0 0 4px rgba(232, 163, 61, 0.12);
+            outline: none;
+        }
+
+        .search-box .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            pointer-events: none;
+        }
+
+        .search-box .search-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .category-filters .filter-btn {
+            padding: 10px 20px;
+            border: 1px solid var(--line);
+            border-radius: 100px;
+            background: transparent;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s var(--ease);
+        }
+
+        .category-filters .filter-btn:hover {
+            border-color: var(--amber-dim);
+            color: var(--cream);
+        }
+
+        .category-filters .filter-btn.active {
+            background: var(--amber);
+            color: #12100a;
+            border-color: var(--amber);
+        }
+
+        .results-count {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        /* ============================================================
+           MENU GRID
+           ============================================================ */
+        .menu-grid-section {
+            padding: 0 6vw 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .menu-item-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 22px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s var(--ease);
+            position: relative;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .menu-item-card.hidden {
+            display: none;
+        }
+
+        .menu-item-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--amber-dim);
+            box-shadow: var(--shadow);
+        }
+
+        .menu-item-card .badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 2;
+            background: var(--red);
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 100px;
+            box-shadow: 0 0 16px rgba(255, 71, 87, 0.4);
+        }
+
+        .menu-item-card .badge.amber {
+            background: var(--amber);
+            color: #12100a;
+            box-shadow: 0 0 16px rgba(232, 163, 61, 0.4);
+        }
+
+        .menu-item-card .image-wrap {
+            aspect-ratio: 1/1;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 30%, rgba(232, 163, 61, 0.10), transparent 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+        }
+
+        .menu-item-card .image-wrap img {
+            max-width: 85%;
+            max-height: 85%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.5));
+            transition: transform 0.4s var(--ease);
+        }
+
+        .menu-item-card:hover .image-wrap img {
+            transform: scale(1.06) translateY(-3px);
+        }
+
+        .menu-item-card .item-category {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--amber-dim);
+            margin-bottom: 6px;
+        }
+
+        .menu-item-card .item-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--cream);
+            line-height: 1.3;
+        }
+
+        .menu-item-card .item-desc {
+            color: var(--muted);
+            font-size: 0.82rem;
+            margin-top: 6px;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .menu-item-card .item-footer {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px dashed var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .menu-item-card .item-price {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--amber);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .menu-item-card .order-link-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--amber);
+            color: #12100a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s var(--ease);
+            flex-shrink: 0;
+            border: none;
+            cursor: pointer;
+        }
+
+        .menu-item-card .order-link-btn:hover {
+            transform: scale(1.12);
+            background: #f0ae4c;
+            box-shadow: 0 0 24px rgba(232, 163, 61, 0.35);
+        }
+
+        .menu-item-card .order-link-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ============================================================
+           EMPTY STATE
+           ============================================================ */
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+            grid-column: 1 / -1;
+        }
+
+        .no-results.visible {
+            display: block;
+        }
+
+        .no-results svg {
+            width: 48px;
+            height: 48px;
+            color: var(--amber-dim);
+            margin-bottom: 16px;
+        }
+
+        .no-results h3 {
+            font-size: 1.2rem;
+            color: var(--cream);
+            margin-bottom: 6px;
+        }
+
+        /* ============================================================
+           CTA BANNER
+           ============================================================ */
+        .menu-cta {
+            padding: 60px 6vw;
+            text-align: center;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-cta h2 {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            color: var(--cream);
+            margin-bottom: 12px;
+        }
+
+        .menu-cta p {
+            color: var(--muted);
+            max-width: 480px;
+            margin: 0 auto 24px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .menu-cta .cta-btns {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 14px 30px;
+            border-radius: 100px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s var(--ease);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: var(--amber);
+            color: #12100a;
+            box-shadow: 0 0 28px rgba(232, 163, 61, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #f0ae4c;
+            box-shadow: 0 0 40px rgba(232, 163, 61, 0.45);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--cream);
+            border-color: var(--line);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--amber-dim);
+            background: rgba(232, 163, 61, 0.05);
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .menu-footer {
+            padding: 40px 6vw 100px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            color: var(--muted);
+            font-size: 0.78rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-footer a {
+            color: var(--muted);
+            transition: color 0.2s;
+        }
+
+        .menu-footer a:hover {
+            color: var(--amber);
+        }
+
+        .menu-footer .disclaimer {
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* ============================================================
+           FLOATING WHATSAPP
+           ============================================================ */
+        .wa-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 60;
+            background: var(--amber);
+            color: #12100a;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 24px rgba(232, 163, 61, 0.45);
+            text-decoration: none;
+            transition: transform 0.2s var(--ease);
+        }
+
+        .wa-float:hover {
+            transform: scale(1.08);
+        }
+
+        .wa-float svg {
+            width: 26px;
+            height: 26px;
+        }
+
+        /* ============================================================
+           ANIMATIONS
+           ============================================================ */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item-card {
+            animation: fadeUp 0.5s var(--ease) both;
+        }
+
+        .menu-item-card:nth-child(1) {
+            animation-delay: 0.03s;
+        }
+        .menu-item-card:nth-child(2) {
+            animation-delay: 0.06s;
+        }
+        .menu-item-card:nth-child(3) {
+            animation-delay: 0.09s;
+        }
+        .menu-item-card:nth-child(4) {
+            animation-delay: 0.12s;
+        }
+        .menu-item-card:nth-child(5) {
+            animation-delay: 0.15s;
+        }
+        .menu-item-card:nth-child(6) {
+            animation-delay: 0.18s;
+        }
+        .menu-item-card:nth-child(7) {
+            animation-delay: 0.21s;
+        }
+        .menu-item-card:nth-child(8) {
+            animation-delay: 0.24s;
+        }
+        .menu-item-card:nth-child(9) {
+            animation-delay: 0.27s;
+        }
+        .menu-item-card:nth-child(10) {
+            animation-delay: 0.30s;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .menu-item-card {
+                animation: none;
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        /* ============================================================
+           RESPONSIVE TWEAKS
+           ============================================================ */
+        @media (max-width: 600px) {
+            .menu-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 16px;
+            }
+
+            .menu-item-card {
+                padding: 16px 14px 14px;
+            }
+
+            .menu-item-card .item-name {
+                font-size: 0.88rem;
+            }
+
+            .menu-item-card .item-desc {
+                font-size: 0.74rem;
+            }
+
+            .menu-item-card .item-price {
+                font-size: 0.82rem;
+            }
+
+            .menu-item-card .order-link-btn {
+                width: 32px;
+                height: 32px;
+            }
+
+            .menu-item-card .order-link-btn svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            .category-filters .filter-btn {
+                padding: 6px 14px;
+                font-size: 0.65rem;
+            }
+
+            .search-box input {
+                padding: 12px 16px 12px 40px;
+                font-size: 0.82rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .menu-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .menu-item-card .image-wrap {
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    HEADER
+    ============================================================ -->
+    <header class="menu-header">
+        <a href="index.html" class="logo">
+            <img src="rockseenepal.jpg" alt="Rocksee Nepal" />
+            <div>
+                <span class="brand">Rocksee <span>Nepal</span></span>
+                <span class="sub">24-Hour Delivery</span>
+            </div>
+        </a>
+        <div class="header-actions">
+            <a href="index.html" class="back-btn">
+                <span>← Back to Home</span>
+            </a>
+            <a href="https://wa.me/9768756185" target="_blank" class="whatsapp-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.08L2 22l5.08-1.32A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.2-1.77 1.24-.45.05-.9.24-3.02-.63-2.56-1.05-4.2-3.63-4.33-3.8-.13-.17-1.03-1.37-1.03-2.61 0-1.24.65-1.85.88-2.1.22-.24.5-.3.66-.3.17 0 .33 0 .48.01.15.01.36-.06.56.43.22.53.73 1.83.8 1.96.06.13.1.28.02.45-.08.17-.13.28-.26.43-.13.15-.27.34-.39.46-.13.13-.26.27-.11.53.15.26.67 1.1 1.44 1.79 1 .89 1.83 1.16 2.09 1.29.26.13.41.11.56-.07.15-.17.65-.76.82-1.02.17-.26.35-.22.58-.13.24.09 1.51.71 1.77.84.26.13.43.19.5.3.06.11.06.63-.16 1.25z"/>
+                </svg>
+                <span>Order</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    HERO
+    ============================================================ -->
+    <section class="menu-hero">
+        <div class="eyebrow">// The Full Menu</div>
+        <h1>What's your <span class="highlight">pour</span> tonight?</h1>
+        <p>Browse our full selection of whiskey, beer, wine, spirits, and mixers. All available 24/7 across Kathmandu.</p>
+    </section>
+
+    <!-- ============================================================
+    SEARCH & FILTERS
+    ============================================================ -->
+    <section class="menu-controls">
+        <div class="controls-wrap">
+            <div class="search-box">
+                <span class="search-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                    </svg>
+                </span>
+                <input type="text" id="searchInput" placeholder="Search menu…" aria-label="Search menu items" />
+            </div>
+            <div class="category-filters" id="categoryFilters">
+                <button class="filter-btn active" data-category="all">All</button>
+                <button class="filter-btn" data-category="whiskey">Whiskey</button>
+                <button class="filter-btn" data-category="beer">Beer</button>
+                <button class="filter-btn" data-category="wine">Wine</button>
+                <button class="filter-btn" data-category="spirits">Spirits</button>
+                <button class="filter-btn" data-category="mixers">Mixers</button>
+            </div>
+        </div>
+        <div class="results-count" id="resultsCount">Showing all items</div>
+    </section>
+
+    <!-- ============================================================
+    MENU GRID
+    ============================================================ -->
+    <section class="menu-grid-section">
+        <div class="menu-grid" id="menuGrid">
+
+            <!-- ========== WHISKEY ========== -->
+            <div class="menu-item-card" data-category="whiskey" data-name="Old Durbar 15 Years Ceramic">
+                <span class="badge amber">Popular</span>
+                <div class="image-wrap">
+                    <img src="img/old durbar ceramic Nepali Whisky.jpg" alt="Old Durbar 15 Years Ceramic" loading="lazy" />
+                </div>
+                <div class="item-category">Whiskey</div>
+                <div class="item-name">Old Durbar 15 Years</div>
+                <div class="item-desc">Ceramic collector's bottle, blended scotch whisky.</div>
+                <div class="item-footer">
+                    <span class="item-price">NPR 4,500</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20Old%20Durbar%2015%20Years%20(Ceramic)" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-item-card" data-category="whiskey" data-name="Bandipur Blended Malt Scotch Whisky">
+                <div class="image-wrap">
+                    <img src="img/Bandipur Blended Malt Scotch Whisky - 750ML.jpg" alt="Bandipur Blended Malt Scotch Whisky" loading="lazy" />
+                </div>
+                <div class="item-category">Whiskey</div>
+                <div class="item-name">Bandipur Blended Malt</div>
+                <div class="item-desc">Scotch whisky, matured and bottled in small batches.</div>
+                <div class="item-footer">
+                    <span class="item-price">NPR 3,200</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20Bandipur%20Blended%20Malt%20Scotch%20Whisky" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-item-card" data-category="whiskey" data-name="Old Durbar Black Chimney Reserve Whisky">
+                <div class="image-wrap">
+                    <img src="img/old durbar ceramic Nepali Whisky.jpg" alt="Old Durbar Black Chimney Reserve" loading="lazy" />
+                </div>
+                <div class="item-category">Whiskey</div>
+                <div class="item-name">Old Durbar Black Chimney</div>
+                <div class="item-desc">Blended reserve, finished in oloroso sherry barrels.</div>
+                <div class="item-footer">
+                    <span class="item-price">NPR 1,450</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20Old%20Durbar%20Black%20Chimney" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ========== BEER ========== -->
+            <div class="menu-item-card" data-category="beer" data-name="Gorkha Strong Can">
+                <span class="badge amber">Popular</span>
+                <div class="image-wrap">
+                    <img src="img/Gorkha-Strong-Can-500ML.jpg" alt="Gorkha Strong Can" loading="lazy" />
+                </div>
+                <div class="item-category">Beer</div>
+                <div class="item-name">Gorkha Strong (Can)</div>
+                <div class="item-desc">500ml can, Nepal's bold local lager.</div>
+                <div class="item-footer">
+                    <span class="item-price">NPR 320</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20Gorkha%20Strong%20Can" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-item-card" data-category="beer" data-name="Gorkha Strong Bottle">
+                <div class="image-wrap">
+                    <img src="img/Gorkha Strong.png" alt="Gorkha Strong Bottle" loading="lazy" />
+                </div>
+                <div class="item-category">Beer</div>
+                <div class="item-name">Gorkha Strong (Bottle)</div>
+                <div class="item-desc">650ml bottle, cold on delivery.</div>
+                <div class="item-footer">
+                    <span class="item-price">NPR 350</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20Gorkha%20Strong%20Bottle" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-item-card" data-category="beer" data-name="Tuborg Green Can">
+                <div class="image-wrap">
+                    <img src="img/tuborg can.jpg" alt="Tuborg Green Can" loading="lazy" />
+                </div>
+                <div class="item-category">Beer</div>
+                <div class="item-name">Tuborg Green (Can)</div>
+                <div class="item-desc">500ml can, crisp Danish-style lager.</div>
+                <div class="item-footer">
+                    <span class="item-price">NPR 340</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20Tuborg%20Green%20Can" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-item-card" data-category="beer" data-name="Tuborg Green Bottle">
+                <div class="image-wrap">
+                    <img src="img/Tubirg.jpg" alt="Tuborg Green Bottle" loading="lazy" />
+                </div>
+                <div class="item-category">Beer</div>
+                <div class="item-name">Tuborg Green (Bottle)</div>
+                <div class="item-desc">650ml bottle, delivered cold.</div>
+                <div class="item-footer">
+                    <span class="item-price">NPR 380</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20Tuborg%20Green%20Bottle" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-item-card" data-category="beer" data-name="Kingfisher Premium Beer">
+                <div class="image-wrap">
+                    <img src="img/Kingfisher_Premium_Beer_From_India.jpg" alt="Kingfisher Premium" loading="lazy" />
+                </div>
+                <div class="item-category">Beer</div>
+                <div class="item-name">Kingfisher Premium</div>
+                <div class="item-desc">330ml bottle, imported from India.</div>
+                <div class="item-footer">
+                    <span class="item-price">NPR 400</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20Kingfisher%20Premium" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ========== WINE ========== -->
+            <div class="menu-item-card" data-category="wine" data-name="Manang Valley Premium Wine">
+                <div class="image-wrap">
+                    <img src="img/Manag Valley.jpg" alt="Manang Valley Premium Wine" loading="lazy" />
+                </div>
+                <div class="item-category">Wine</div>
+                <div class="item-name">Manang Valley Premium</div>
+                <div class="item-desc">Light, food-friendly white — locally produced.</div>
+                <div class="item-footer">
+                    <span class="item-price">NPR 2,800</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20Manang%20Valley%20Premium%20Wine" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-item-card" data-category="wine" data-name="Robertson Winery Natural Sweet Red">
+                <span class="badge amber">Popular</span>
+                <div class="image-wrap">
+                    <img src="img/Robertson-Winery-Natural-Sweet-Red-750ML.jpg" alt="Robertson Natural Sweet Red" loading="lazy" />
+                </div>
+                <div class="item-category">Wine</div>
+                <div class="item-name">Robertson Natural Sweet Red</div>
+                <div class="item-desc">750ml, smooth and sweet — a dinner favorite.</div>
+                <div class="item-footer">
+                    <span class="item-price">NPR 3,200</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20Robertson%20Natural%20Sweet%20Red" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ========== SPIRITS ========== -->
+            <div class="menu-item-card" data-category="spirits" data-name="Vodka">
+                <div class="image-wrap">
+                    <img src="img/vodka.jpg" alt="Vodka" loading="lazy" />
+                </div>
+                <div class="item-category">Spirits</div>
+                <div class="item-name">Vodka (750ml)</div>
+                <div class="item-desc">Local and imported options available.</div>
+                <div class="item-footer">
+                    <span class="item-price">From NPR 1,500</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20Vodka" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-item-card" data-category="spirits" data-name="Rum">
+                <div class="image-wrap">
+                    <img src="img/rum.jpg" alt="Rum" loading="lazy" />
+                </div>
+                <div class="item-category">Spirits</div>
+                <div class="item-name">Rum (750ml)</div>
+                <div class="item-desc">Dark and white, spiced on request.</div>
+                <div class="item-footer">
+                    <span class="item-price">From NPR 1,400</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20Rum" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-item-card" data-category="spirits" data-name="Gin">
+                <div class="image-wrap">
+                    <img src="img/gin.jpg" alt="Gin" loading="lazy" />
+                </div>
+                <div class="item-category">Spirits</div>
+                <div class="item-name">Gin (750ml)</div>
+                <div class="item-desc">London dry and local craft options.</div>
+                <div class="item-footer">
+                    <span class="item-price">From NPR 2,000</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20Gin" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ========== MIXERS ========== -->
+            <div class="menu-item-card" data-category="mixers" data-name="Mixers and Soda">
+                <div class="image-wrap">
+                    <img src="img/mixers-soda.jpg" alt="Mixers and soda" loading="lazy" />
+                </div>
+                <div class="item-category">Mixers</div>
+                <div class="item-name">Mixers &amp; Soda</div>
+                <div class="item-desc">Tonic, cola, soda water, juice.</div>
+                <div class="item-footer">
+                    <span class="item-price">From NPR 120</span>
+                    <a href="https://wa.me/9768756185?text=Hi%2C%20I'd%20like%20to%20order%20mixers" target="_blank" class="order-link-btn" aria-label="Order on WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ========== EMPTY STATE ========== -->
+            <div class="no-results" id="noResults">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 8v5M12 16h.01"/>
+                </svg>
+                <h3>No items found</h3>
+                <p>Try adjusting your search or filter.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============================================================
+    CTA BANNER
+    ============================================================ -->
+    <section class="menu-cta">
+        <h2>Ready to <span style="color:var(--amber);">order</span>?</h2>
+        <p>Message us on WhatsApp or call us directly. We deliver 24/7 across Kathmandu.</p>
+        <div class="cta-btns">
+            <a href="https://wa.me/9768756185" target="_blank" class="btn btn-primary">Order on WhatsApp</a>
+            <a href="tel:9768756185" class="btn btn-ghost">Call 976-8756185</a>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    FOOTER
+    ============================================================ -->
+    <footer class="menu-footer">
+        <div class="disclaimer">
+            <strong>Rocksee Nepal</strong> is a licensed alcohol delivery service. We deliver only to customers of legal drinking age in Nepal and reserve the right to request ID upon delivery. Please drink responsibly.
+        </div>
+        <div>
+            <a href="https://www.instagram.com/rockseenepal/" target="_blank">Instagram</a> &nbsp;·&nbsp;
+            <a href="tel:9768756185">976-8756185</a> &nbsp;·&nbsp;
+            Kathmandu 44600
+            <br />
+            <span style="color:var(--muted);font-size:0.7rem;">© <span id="year"></span> Rocksee Nepal</span>
+        </div>
+    </footer>
+
+    <!-- ============================================================
+    FLOATING WHATSAPP
+    ============================================================ -->
+    <a class="wa-float" href="https://wa.me/9768756185" target="_blank" aria-label="Order on WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.08L2 22l5.08-1.32A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.2-1.77 1.24-.45.05-.9.24-3.02-.63-2.56-1.05-4.2-3.63-4.33-3.8-.13-.17-1.03-1.37-1.03-2.61 0-1.24.65-1.85.88-2.1.22-.24.5-.3.66-.3.17 0 .33 0 .48.01.15.01.36-.06.56.43.22.53.73 1.83.8 1.96.06.13.1.28.02.45-.08.17-.13.28-.26.43-.13.15-.27.34-.39.46-.13.13-.26.27-.11.53.15.26.67 1.1 1.44 1.79 1 .89 1.83 1.16 2.09 1.29.26.13.41.11.56-.07.15-.17.65-.76.82-1.02.17-.26.35-.22.58-.13.24.09 1.51.71 1.77.84.26.13.43.19.5.3.06.11.06.63-.16 1.25z"/>
+        </svg>
+    </a>
+
+    <!-- ============================================================
+    SCRIPTS
+    ============================================================ -->
+    <script>
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // ============================================================
+        // SEARCH & FILTER LOGIC
+        // ============================================================
+        const searchInput = document.getElementById('searchInput');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const menuItems = document.querySelectorAll('.menu-item-card');
+        const noResults = document.getElementById('noResults');
+        const resultsCount = document.getElementById('resultsCount');
+
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        function filterMenu() {
+            let visibleCount = 0;
+
+            menuItems.forEach(item => {
+                const category = item.dataset.category;
+                const name = item.dataset.name.toLowerCase();
+                const searchMatch = name.includes(currentSearch.toLowerCase());
+                const categoryMatch = currentFilter === 'all' || category === currentFilter;
+
+                if (searchMatch && categoryMatch) {
+                    item.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+
+            // Update results count
+            if (visibleCount === 0) {
+                noResults.classList.add('visible');
+                resultsCount.textContent = 'No items found';
+            } else {
+                noResults.classList.remove('visible');
+                resultsCount.textContent = `Showing ${visibleCount} item${visibleCount > 1 ? 's' : ''}`;
+            }
+        }
+
+        // Search input
+        searchInput.addEventListener('input', (e) => {
+            currentSearch = e.target.value.trim();
+            filterMenu();
+        });
+
+        // Filter buttons
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.category;
+                filterMenu();
+            });
+        });
+
+        // Initial render
+        filterMenu();
+    </script>
+
+</body>
+</html>
