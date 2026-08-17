@@ -7,20 +7,540 @@
 <meta name="description" content="Rocksee Nepal delivers beer, whiskey, wine, and spirits across Kathmandu, 24 hours a day. Order on WhatsApp or by phone.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<style>
+/* =========================================================
+   ROCK SEE NEPAL — Design tokens
+   Night delivery / neon bar-signage aesthetic
+   ========================================================= */
+:root{
+  --bg:#0A0D16;
+  --bg-panel:#10131f;
+  --bg-panel2:#151a2c;
+  --amber:#E8A33D;
+  --amber-deep:#B97324;
+  --amber-dim:#8a6524;
+  --red:#FF4757;
+  --cream:#F5F1E6;
+  --muted:#8891A8;
+  --line:#232a42;
+  --radius:2px;
+  --ease:cubic-bezier(.22,.7,.24,1);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--cream);
+  font-family:'Manrope', sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+.display{font-family:'Anton', sans-serif; text-transform:uppercase; letter-spacing:0.01em;}
+.mono{font-family:'JetBrains Mono', monospace;}
+a{color:inherit;}
+img,svg{display:block; max-width:100%;}
+
+::selection{background:var(--amber); color:#12100a;}
+
+:focus-visible{
+  outline:2px solid var(--amber);
+  outline-offset:3px;
+  border-radius:1px;
+}
+
+/* ambient night texture */
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  background-image:
+    radial-gradient(ellipse 900px 550px at 12% -8%, rgba(232,163,61,0.10), transparent 60%),
+    radial-gradient(ellipse 750px 550px at 108% 15%, rgba(255,71,87,0.08), transparent 60%),
+    radial-gradient(ellipse 600px 500px at 50% 110%, rgba(232,163,61,0.05), transparent 60%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* =========================================================
+   Age gate
+   ========================================================= */
+#agegate{
+  position:fixed; inset:0; z-index:999;
+  background:
+    radial-gradient(circle at top left, rgba(232,163,61,0.18), transparent 32%),
+    linear-gradient(135deg, #04050a 0%, #080b14 45%, #03040a 100%);
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; text-align:center; padding:24px;
+}
+#agegate .gate-icon{
+  width:132px; height:132px; margin:0 auto 22px;
+  opacity:0.95;
+  border-radius:50%;
+  background-image:
+    linear-gradient(135deg, rgba(255,255,255,0.14), rgba(232,163,61,0.18)),
+    url("rockseenepal.jpg");
+  background-size:cover; background-position:center;
+  display:block;
+  border:2px solid rgba(232,163,61,0.45);
+  box-shadow:
+    0 0 0 8px rgba(232,163,61,0.08),
+    0 18px 40px rgba(0,0,0,0.42),
+    inset 0 0 24px rgba(255,255,255,0.16);
+  position:relative;
+  overflow:hidden;
+}
+#agegate .gate-icon::after{
+  content:"";
+  position:absolute; inset:0;
+  border-radius:inherit;
+  background:linear-gradient(135deg, rgba(255,255,255,0.16), transparent 45%, rgba(0,0,0,0.25));
+  pointer-events:none;
+}
+#agegate .glow{
+  font-family:'Anton', sans-serif;
+  font-size:clamp(2.2rem,7vw,4rem);
+  color:var(--amber);
+  text-shadow:0 0 18px rgba(232,163,61,0.55), 0 0 46px rgba(232,163,61,0.25);
+  letter-spacing:0.02em;
+  margin-bottom:10px;
+}
+#agegate p{color:var(--muted); max-width:460px; margin:0 auto 28px; line-height:1.6; font-size:0.95rem;}
+.gate-btns{display:flex; gap:14px; flex-wrap:wrap; justify-content:center;}
+body.locked{overflow:hidden;}
+#site{display:none;}
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+.btn{
+  font-family:'Manrope', sans-serif; font-weight:700; font-size:0.85rem;
+  letter-spacing:0.08em; text-transform:uppercase;
+  padding:14px 30px; border-radius:var(--radius); cursor:pointer;
+  border:1px solid transparent; transition:transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+  text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+}
+.btn:hover{transform:translateY(-2px);}
+.btn:active{transform:translateY(0);}
+.btn-primary{background:var(--amber); color:#12100a; box-shadow:0 0 24px rgba(232,163,61,0.35);}
+.btn-primary:hover{background:#f0ae4c; box-shadow:0 0 32px rgba(232,163,61,0.5);}
+.btn-ghost{background:transparent; color:var(--cream); border-color:var(--line);}
+.btn-ghost:hover{border-color:var(--amber-dim); background:rgba(232,163,61,0.05);}
+.btn-sm{padding:10px 18px; font-size:0.72rem;}
+
+/* Language toggle */
+.lang-toggle {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  margin-left: 8px;
+}
+.lang-toggle:hover {
+  border-color: var(--amber-dim);
+  color: var(--cream);
+}
+.lang-toggle.active {
+  background: var(--amber);
+  color: #12100a;
+  border-color: var(--amber);
+}
+
+/* =========================================================
+   Nav
+   ========================================================= */
+header{
+  position:sticky; top:0; z-index:80;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 6vw; background:rgba(10,13,22,0.82); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.logo{font-family:'Anton', sans-serif; font-size:1.25rem; letter-spacing:0.03em; color:var(--cream); display:flex; align-items:center; gap:10px;}
+.logo .mark{width:26px; height:26px; flex:none;}
+.logo span{color:var(--amber);}
+.nav-links{display:flex; align-items:center; gap:8px;}
+nav{display:flex;}
+nav a{
+  position:relative; color:var(--muted); text-decoration:none; font-size:0.8rem;
+  letter-spacing:0.05em; text-transform:uppercase; margin-left:30px; padding:4px 0;
+  transition:color .15s;
+}
+nav a::after{
+  content:""; position:absolute; left:0; bottom:-3px; width:0; height:1px; background:var(--amber);
+  transition:width .2s var(--ease);
+}
+nav a:hover{color:var(--cream);}
+nav a.active{color:var(--amber);}
+nav a.active::after{width:100%;}
+
+.hamburger{
+  display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:8px;
+}
+.hamburger span{width:22px; height:2px; background:var(--cream); transition:transform .2s var(--ease), opacity .2s var(--ease);}
+.mobile-menu{
+  display:none; position:fixed; inset:0; z-index:90; background:#05060a;
+  flex-direction:column; align-items:center; justify-content:center; gap:28px;
+}
+.mobile-menu a{
+  font-family:'Anton', sans-serif; font-size:1.8rem; text-transform:uppercase; color:var(--cream); text-decoration:none;
+}
+.mobile-menu a:hover{color:var(--amber);}
+.mobile-menu.open{display:flex;}
+body.menu-open{overflow:hidden;}
+
+@media(max-width:820px){
+  nav{display:none;}
+  .hamburger{display:flex;}
+  .nav-links .order-link{display:none;}
+}
+
+/* =========================================================
+   Hero
+   ========================================================= */
+.hero{
+  position:relative; z-index:1;
+  padding:8vw 6vw 6vw;
+  display:grid; grid-template-columns:1.15fr 0.85fr; gap:48px; align-items:center;
+  min-height:86vh;
+}
+@media(max-width:900px){ .hero{grid-template-columns:1fr; padding-top:12vw; min-height:auto;} }
+
+.badge-live{
+  display:inline-flex; align-items:center; gap:8px;
+  border:1px solid var(--line); border-radius:100px; padding:6px 14px;
+  font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:var(--muted);
+  margin-bottom:26px;
+}
+.dot{width:7px; height:7px; border-radius:50%; background:var(--red); box-shadow:0 0 8px var(--green); animation:pulse 1.6s infinite;}
+@keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.35;}}
+
+h1.hero-title{
+  font-size:clamp(2.6rem, 6vw, 5rem);
+  line-height:0.98;
+  color:var(--cream);
+}
+h1.hero-title .amber{color:var(--amber); text-shadow:0 0 30px rgba(232,163,61,0.45);}
+.hero p.sub{margin-top:22px; color:var(--muted); font-size:1.05rem; max-width:480px; line-height:1.7;}
+.hero-ctas{display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;}
+.hero-meta{display:flex; gap:28px; margin-top:42px; flex-wrap:wrap;}
+.hero-meta div{border-left:2px solid var(--amber-dim); padding-left:14px;}
+.hero-meta .num{font-family:'Anton', sans-serif; font-size:1.5rem; color:var(--cream);}
+.hero-meta .lbl{font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;}
+
+/* --- signature: pouring glass --- */
+.sign-wrap{display:flex; justify-content:center; align-items:center; position:relative;}
+.pour-card{
+  width:100%; max-width:380px;
+  border:1px solid var(--line); border-radius:var(--radius);
+  background:linear-gradient(180deg, #0e1220, #0a0c15);
+  padding:36px 30px 30px; position:relative; overflow:hidden;
+  text-align:center;
+}
+.pour-card::after{
+  content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(180deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 3px);
+  pointer-events:none;
+}
+.pour-svg{width:150px; margin:0 auto 18px;}
+.liquid{
+  transform-origin:bottom;
+  animation:fill 2.6s var(--ease) 0.4s both, wobble 3.4s ease-in-out 3s infinite;
+}
+@keyframes fill{
+  from{transform:scaleY(0);}
+  to{transform:scaleY(1);}
+}
+@keyframes wobble{
+  0%,100%{transform:scaleY(1) translateY(0);}
+  50%{transform:scaleY(0.97) translateY(1px);}
+}
+.pour-drip{
+  animation:drip 2.6s var(--ease) 0.4s 1;
+}
+@keyframes drip{
+  0%{opacity:0; transform:translateY(-8px);}
+  15%{opacity:1;}
+  70%{opacity:1; transform:translateY(2px);}
+  100%{opacity:0; transform:translateY(6px);}
+}
+.pour-card .word{font-family:'Anton', sans-serif; font-size:1.9rem; color:var(--amber); letter-spacing:0.02em;
+  text-shadow:0 0 8px rgba(232,163,61,0.7), 0 0 26px rgba(232,163,61,0.4);}
+.pour-card .word.red{color:var(--red); font-size:1.15rem; text-shadow:0 0 8px rgba(255,71,87,0.7); margin-top:4px;}
+.pour-card .caption{margin-top:14px; color:var(--muted); font-size:0.78rem; font-family:'JetBrains Mono', monospace;}
+
+@media (prefers-reduced-motion: reduce){
+  .liquid, .pour-drip, .dot{animation:none !important;}
+}
+
+/* =========================================================
+   Bar-rail marquee divider
+   ========================================================= */
+.rail{
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  background:var(--bg-panel); overflow:hidden; white-space:nowrap;
+  position:relative; z-index:1;
+}
+.rail-track{
+  display:inline-flex; align-items:center; gap:40px;
+  padding:16px 0; animation:scroll-rail 28s linear infinite;
+}
+.rail-track span{
+  font-family:'JetBrains Mono', monospace; font-size:0.8rem; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--amber-dim); display:inline-flex; align-items:center; gap:40px;
+}
+.rail-track span b{color:var(--muted); font-weight:500;}
+@keyframes scroll-rail{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+@media (prefers-reduced-motion: reduce){ .rail-track{animation:none;} }
+
+/* =========================================================
+   Sections shared
+   ========================================================= */
+section{position:relative; z-index:1; padding:100px 6vw;}
+.eyebrow{
+  font-family:'JetBrains Mono', monospace; font-size:0.78rem; color:var(--amber);
+  letter-spacing:0.12em; text-transform:uppercase; margin-bottom:14px;
+}
+h2.section-title{font-size:clamp(1.8rem,3.6vw,2.8rem); color:var(--cream); max-width:640px;}
+.section-sub{color:var(--muted); max-width:560px; margin-top:14px; line-height:1.7; font-size:0.98rem;}
+
+.reveal{opacity:0; transform:translateY(22px); transition:opacity .7s var(--ease), transform .7s var(--ease);}
+.reveal.in{opacity:1; transform:translateY(0);}
+@media (prefers-reduced-motion: reduce){ .reveal{opacity:1; transform:none; transition:none;} }
+
+/* =========================================================
+   Trust strip
+   ========================================================= */
+.trust-strip{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line);
+  border:1px solid var(--line); margin-top:50px;
+}
+@media(max-width:820px){ .trust-strip{grid-template-columns:repeat(2,1fr);} }
+.trust-item{background:var(--bg); padding:26px 22px; display:flex; gap:14px; align-items:flex-start;}
+.trust-item svg{flex:none; width:22px; height:22px; color:var(--amber); margin-top:2px;}
+.trust-item h4{font-size:0.9rem; text-transform:uppercase; letter-spacing:0.03em; margin-bottom:5px;}
+.trust-item p{color:var(--muted); font-size:0.8rem; line-height:1.5;}
+
+/* =========================================================
+   Menu / pricing cards
+   ========================================================= */
+.menu-tabs{display:flex; gap:10px; margin-top:44px; flex-wrap:wrap;}
+.tab-btn{
+  font-family:'JetBrains Mono', monospace; font-size:0.78rem; letter-spacing:0.05em; text-transform:uppercase;
+  background:transparent; border:1px solid var(--line); color:var(--muted); padding:10px 18px;
+  border-radius:100px; cursor:pointer; transition:all .18s var(--ease);
+}
+.tab-btn:hover{border-color:var(--amber-dim); color:var(--cream);}
+.tab-btn.active{background:var(--amber); color:#12100a; border-color:var(--amber);}
+
+.menu-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:32px;}
+@media(max-width:1080px){ .menu-grid{grid-template-columns:repeat(3,1fr);} }
+@media(max-width:760px){ .menu-grid{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:480px){ .menu-grid{grid-template-columns:1fr;} }
+
+.menu-panel{display:none;}
+.menu-panel.active{display:contents;}
+
+.menu-item{
+  position:relative; background:var(--bg-panel); border:1px solid var(--line); border-radius:6px;
+  padding:20px 18px 18px; display:flex; flex-direction:column;
+  transition:transform .22s var(--ease), border-color .22s var(--ease), box-shadow .22s var(--ease);
+}
+.menu-item:hover{transform:translateY(-4px); border-color:var(--amber-dim); box-shadow:0 16px 34px rgba(0,0,0,0.38);}
+
+.menu-badge{
+  position:absolute; top:12px; left:12px; z-index:2;
+  background:var(--red); color:#fff; font-family:'JetBrains Mono', monospace;
+  font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase;
+  padding:4px 9px; border-radius:100px; box-shadow:0 0 14px rgba(255,71,87,0.5);
+}
+
+.menu-img{
+  aspect-ratio:1/1; border-radius:4px; margin-bottom:16px; position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(circle at 50% 38%, rgba(232,163,61,0.14), transparent 68%), var(--bg);
+}
+.menu-img img{
+  max-width:82%; max-height:86%; width:auto; height:auto; object-fit:contain;
+  filter:drop-shadow(0 14px 16px rgba(0,0,0,0.55));
+  transition:transform .35s var(--ease);
+}
+.menu-item:hover .menu-img img{transform:scale(1.06) translateY(-2px);}
+.menu-img svg{width:46%; height:46%; opacity:0.7;}
+
+.menu-item .name{font-weight:700; font-size:0.94rem; color:var(--cream); line-height:1.3;}
+.menu-item .desc{color:var(--muted); font-size:0.78rem; margin-top:6px; line-height:1.5; min-height:2.2em;}
+
+.menu-item-footer{
+  margin-top:auto; padding-top:14px; margin-top:14px; border-top:1px dashed var(--line);
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.menu-item .price{font-family:'JetBrains Mono', monospace; color:var(--amber); font-size:0.88rem; white-space:nowrap;}
+.order-btn{
+  width:34px; height:34px; border-radius:50%; background:var(--amber); color:#12100a; flex:none;
+  display:flex; align-items:center; justify-content:center; transition:transform .18s var(--ease), background .18s;
+}
+.order-btn:hover{transform:scale(1.1); background:#f0ae4c;}
+.order-btn svg{width:15px; height:15px;}
+
+.menu-more{
+  border:1px dashed var(--line); border-radius:6px; background:transparent;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+  padding:30px 20px; gap:10px; color:var(--muted); min-height:100%;
+}
+.menu-more svg{width:26px; height:26px; color:var(--amber);}
+.menu-more p{font-size:0.82rem; line-height:1.5;}
+
+.menu-note{margin-top:24px; color:var(--muted); font-size:0.78rem; font-family:'JetBrains Mono', monospace;}
+
+/* =========================================================
+   How it works
+   ========================================================= */
+.steps{display:grid; grid-template-columns:repeat(3,1fr); gap:32px; margin-top:50px;}
+@media(max-width:820px){ .steps{grid-template-columns:1fr;} }
+.step{border-top:2px solid var(--amber); padding-top:20px;}
+.step .n{font-family:'Anton', sans-serif; font-size:2.6rem; color:var(--amber-dim);}
+.step h3{margin:10px 0 10px; font-size:1.1rem; text-transform:uppercase; letter-spacing:0.03em;}
+.step p{color:var(--muted); font-size:0.9rem; line-height:1.7;}
+
+/* =========================================================
+   Reviews / carousel
+   ========================================================= */
+.review-panel{
+  background:var(--bg-panel2); border:1px solid var(--line); border-radius:var(--radius);
+  padding:50px 6vw; margin-top:56px;
+  display:grid; grid-template-columns:0.42fr 1fr; gap:50px; align-items:center;
+}
+@media(max-width:820px){ .review-panel{grid-template-columns:1fr;} }
+.rating-big{font-family:'Anton', sans-serif; font-size:5rem; color:var(--amber); line-height:1;}
+.stars{color:var(--amber); letter-spacing:3px; font-size:1.1rem; margin:10px 0;}
+.review-panel .count{color:var(--muted); font-size:0.85rem;}
+
+.carousel{position:relative; min-height:130px;}
+.carousel-slide{
+  position:absolute; inset:0; opacity:0; transform:translateY(10px);
+  transition:opacity .45s var(--ease), transform .45s var(--ease); pointer-events:none;
+}
+.carousel-slide.active{opacity:1; transform:translateY(0); pointer-events:auto; position:relative;}
+.quote{font-size:1.12rem; line-height:1.8; color:var(--cream);}
+.quote-author{margin-top:16px; color:var(--muted); font-size:0.85rem; font-family:'JetBrains Mono', monospace;}
+.carousel-dots{display:flex; gap:8px; margin-top:22px;}
+.carousel-dots button{
+  width:8px; height:8px; border-radius:50%; border:none; background:var(--line); cursor:pointer; padding:0;
+  transition:background .18s;
+}
+.carousel-dots button.active{background:var(--amber); width:22px; border-radius:4px;}
+
+/* =========================================================
+   Delivery zones / hours
+   ========================================================= */
+.info-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); margin-top:50px;}
+@media(max-width:820px){ .info-grid{grid-template-columns:1fr;} }
+.info-card{background:var(--bg); padding:40px;}
+.info-card h3{font-family:'Anton', sans-serif; text-transform:uppercase; color:var(--amber); font-size:1.1rem; margin-bottom:18px;}
+.info-card ul{list-style:none;}
+.info-card li{display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px dashed var(--line); color:var(--muted); font-size:0.9rem;}
+.info-card li span:last-child{color:var(--cream); font-family:'JetBrains Mono', monospace; font-size:0.85rem;}
+.zone-chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px;}
+.zone-chips span{
+  border:1px solid var(--line); border-radius:100px; padding:6px 14px; font-size:0.78rem; color:var(--muted);
+  font-family:'JetBrains Mono', monospace;
+}
+
+/* =========================================================
+   FAQ accordion
+   ========================================================= */
+.faq{max-width:760px; margin-top:50px;}
+.faq details{border-bottom:1px solid var(--line); padding:20px 0;}
+.faq summary{
+  cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center;
+  font-weight:700; font-size:1rem; color:var(--cream);
+}
+.faq summary::-webkit-details-marker{display:none;}
+.faq summary .plus{
+  font-family:'Anton', sans-serif; font-size:1.3rem; color:var(--amber); transition:transform .22s var(--ease); flex:none; margin-left:16px;
+}
+.faq details[open] summary .plus{transform:rotate(45deg);}
+.faq .faq-a{color:var(--muted); font-size:0.9rem; line-height:1.75; margin-top:14px; padding-right:40px;}
+
+/* =========================================================
+   CTA / footer
+   ========================================================= */
+.cta-band{text-align:center; padding:110px 6vw; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+.cta-band h2{font-size:clamp(2rem,5vw,3.4rem); margin-bottom:26px;}
+footer{padding:50px 6vw 90px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px; color:var(--muted); font-size:0.82rem;}
+footer a{color:var(--muted); text-decoration:none;}
+footer a:hover{color:var(--amber);}
+.disclaimer{max-width:900px; margin:0 auto; text-align:center; color:var(--muted); font-size:0.78rem; padding:0 6vw 40px; line-height:1.7;}
+
+/* =========================================================
+   Floating + sticky order UX
+   ========================================================= */
+.wa-float{
+  position:fixed; bottom:24px; right:24px; z-index:60;
+  background:var(--amber); color:#12100a; width:56px; height:56px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; box-shadow:0 4px 22px rgba(232,163,61,0.45);
+  text-decoration:none; transition:transform .18s var(--ease);
+}
+.wa-float:hover{transform:scale(1.08);}
+.wa-float svg{width:26px; height:26px;}
+
+.sticky-order{
+  position:fixed; left:0; right:0; bottom:0; z-index:70;
+  background:rgba(10,13,22,0.95); backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);
+  padding:12px 20px; display:flex; align-items:center; justify-content:space-between; gap:14px;
+  transform:translateY(110%); transition:transform .3s var(--ease);
+}
+.sticky-order.show{transform:translateY(0);}
+.sticky-order .txt{font-size:0.82rem; color:var(--muted);}
+.sticky-order .txt b{color:var(--cream); display:block; font-size:0.92rem;}
+@media(min-width:821px){ .sticky-order{display:none;} }
+
+/* Language toggle in hero */
+.hero-lang-toggle {
+  margin-top: 24px;
+  display: flex;
+  gap: 10px;
+}
+.hero-lang-toggle button {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 6px 18px;
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+.hero-lang-toggle button:hover {
+  border-color: var(--amber-dim);
+  color: var(--cream);
+}
+.hero-lang-toggle button.active {
+  background: var(--amber);
+  color: #12100a;
+  border-color: var(--amber);
+}
+</style>
 </head>
 <body class="locked">
 
 <!-- Age verification gate -->
 <div id="agegate">
-  <svg class="gate-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    
-  </svg>
+  <div class="gate-icon"></div>
   <div class="glow display">18+ Only</div>
-  <p>Rocksee Nepal delivers alcohol in Kathmandu. You must be of legal drinking age in Nepal to enter this site.</p>
+  <p data-en="Rocksee Nepal delivers alcohol in Kathmandu, Lalitpur and Bhaktapur. You must be of legal drinking age in Nepal to enter this site." data-ne="रक्सी नेपालले काठमाडौं, ललितपुर र भक्तपुरमा मदिरा वितरण गर्दछ। यो साइटमा प्रवेश गर्न नेपालको कानुनी पिउने उमेरको हुनु पर्छ।">Rocksee Nepal delivers alcohol in Kathmandu, Lalitpur and Bhaktapur. You must be of legal drinking age in Nepal to enter this site.</p>
   <div class="gate-btns">
-    <button class="btn btn-primary" onclick="enterSite()">I am 18 or older — Enter</button>
-    <a class="btn btn-ghost" href="https://www.google.com">I am under 18 — Exit</a>
+    <button class="btn btn-primary" onclick="enterSite()" data-en="I am 18 or older — Enter" data-ne="म १८ वा सोभन्दा माथि छु — प्रवेश गर्नुहोस्">I am 18 or older — Enter</button>
+    <a class="btn btn-ghost" href="https://www.google.com" data-en="I am under 18 — Exit" data-ne="म १८ भन्दा कम छु — बाहिर निस्कनुहोस्">I am under 18 — Exit</a>
   </div>
 </div>
 
@@ -32,19 +552,20 @@
       <img src="rockseenepal.jpg" alt="Rocksee Nepal logo" style="width:48px; height:auto; border-radius:6px; object-fit:cover;">
       <div style="display:flex; flex-direction:column; line-height:1.1;">
         <span style="font-family:'Anton',sans-serif; font-size:1rem; color:var(--cream);">Rocksee Nepal</span>
-        <span style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.14em; color:var(--amber); text-transform:uppercase;">24-hour delivery</span>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.14em; color:var(--amber); text-transform:uppercase;" data-en="24-hour delivery" data-ne="२४ घण्टा डेलिभरी">24-hour delivery</span>
       </div>
     </a>
   </div>
   <div class="nav-links">
     <nav>
-      <a href="/menu.html">Menu</a>
-      <a href="#how">How it works</a>
-      <a href="#reviews">Reviews</a>
-      <a href="#delivery">Delivery</a>
-      <a href="#faq">FAQ</a>
+      <a href="/menu.html" data-en="Menu" data-ne="मेनू">Menu</a>
+      <a href="#how" data-en="How it works" data-ne="कसरी काम गर्दछ">How it works</a>
+      <a href="#reviews" data-en="Reviews" data-ne="समीक्षाहरू">Reviews</a>
+      <a href="#delivery" data-en="Delivery" data-ne="डेलिभरी">Delivery</a>
+      <a href="#faq" data-en="FAQ" data-ne="प्रश्नहरू">FAQ</a>
     </nav>
-    <a class="btn btn-primary btn-sm order-link" href="#order">Order Now</a>
+    <a class="btn btn-primary btn-sm order-link" href="#order" data-en="Order Now" data-ne="अर्डर गर्नुहोस्">Order Now</a>
+    <button class="lang-toggle" id="langToggle" aria-label="Toggle language">🇳🇵 नेपाली</button>
     <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
@@ -52,28 +573,32 @@
 </header>
 
 <div class="mobile-menu" id="mobileMenu">
-  <a href="/menu.html">Menu</a>
-  <a href="#how">How it works</a>
-  <a href="#reviews">Reviews</a>
-  <a href="#delivery">Delivery</a>
-  <a href="#faq">FAQ</a>
-  <a href="#order" class="btn btn-primary" style="margin-top:10px;">Order Now</a>
+  <a href="/menu.html" data-en="Menu" data-ne="मेनू">Menu</a>
+  <a href="#how" data-en="How it works" data-ne="कसरी काम गर्दछ">How it works</a>
+  <a href="#reviews" data-en="Reviews" data-ne="समीक्षाहरू">Reviews</a>
+  <a href="#delivery" data-en="Delivery" data-ne="डेलिभरी">Delivery</a>
+  <a href="#faq" data-en="FAQ" data-ne="प्रश्नहरू">FAQ</a>
+  <a href="#order" class="btn btn-primary" style="margin-top:10px;" data-en="Order Now" data-ne="अर्डर गर्नुहोस्">Order Now</a>
 </div>
 
 <section class="hero" style="background:radial-gradient(circle at top right, rgba(232,163,61,0.08), transparent 30%), radial-gradient(circle at bottom left, rgba(255,71,87,0.05), transparent 25%);">
   <div>
-    <div class="badge-live"><span class="dot"></span> OPEN NOW — 24 HOURS, KATHMANDU</div>
-    <h1 class="hero-title display">Your bottle,<br>at your door.<br><span class="amber">Any hour.</span></h1>
-    <p class="sub">Kathmandu's round-the-clock liquor delivery. Beer, whiskey, wine, and spirits — ordered in minutes, delivered to your gate, day or night.</p>
-    <p style="margin-top:18px; color:var(--amber); font-family:'JetBrains Mono',monospace; font-size:0.82rem; letter-spacing:0.14em; text-transform:uppercase;">No minimum order. Fast delivery across Kathmandu.</p>
+    <div class="badge-live"><span class="dot"></span> <span data-en="OPEN NOW — 24 HOURS, KATHMANDU" data-ne="अहिले खुला — २४ घण्टा, काठमाडौं">OPEN NOW — 24 HOURS, KATHMANDU</span></div>
+    <h1 class="hero-title display"><span data-en="Your bottle," data-ne="तपाईंको बोतल,">Your bottle,</span><br><span data-en="at your door." data-ne="तपाईंको ढोकामा।">at your door.</span><br><span class="amber"><span data-en="Any hour." data-ne="कुनै पनि घण्टा।">Any hour.</span></span></h1>
+    <p class="sub" data-en="Kathmandu's round-the-clock liquor delivery. Beer, whiskey, wine, and spirits — ordered in minutes, delivered to your gate, day or night." data-ne="काठमाडौंको २४ घण्टा मदिरा वितरण। बियर, ह्विस्की, वाइन, र स्पिरिट — मिनेटमा अर्डर गर्नुहोस्, दिन वा राति तपाईंको गेटमा डेलिभर गरिन्छ।">Kathmandu's round-the-clock liquor delivery. Beer, whiskey, wine, and spirits — ordered in minutes, delivered to your gate, day or night.</p>
+    <p style="margin-top:18px; color:var(--amber); font-family:'JetBrains Mono',monospace; font-size:0.82rem; letter-spacing:0.14em; text-transform:uppercase;" data-en="No minimum order. Fast delivery across Kathmandu." data-ne="न्यूनतम अर्डर छैन। काठमाडौंभरि द्रुत डेलिभरी।">No minimum order. Fast delivery across Kathmandu.</p>
     <div class="hero-ctas">
-      <a class="btn btn-primary" href="https://wa.me/9768756185" target="_blank">Order on WhatsApp</a>
-      <a class="btn btn-ghost" href="tel:9768756185">Call 976-8756185</a>
+      <a class="btn btn-primary" href="https://wa.me/9768756185" target="_blank" data-en="Order on WhatsApp" data-ne="व्हाट्सएपमा अर्डर गर्नुहोस्">Order on WhatsApp</a>
+      <a class="btn btn-ghost" href="tel:9768756185" data-en="Call 976-8756185" data-ne="फोन गर्नुहोस् ९७६-८७५६१८५">Call 976-8756185</a>
     </div>
     <div class="hero-meta">
-      <div><div class="num">4.9 ★</div><div class="lbl">118 Reviews</div></div>
-      <div><div class="num">24 / 7</div><div class="lbl">Always Open</div></div>
-      <div><div class="num">M8GH+8X</div><div class="lbl">Kathmandu 44600</div></div>
+      <div><div class="num">4.9 ★</div><div class="lbl" data-en="118 Reviews" data-ne="११८ समीक्षाहरू">118 Reviews</div></div>
+      <div><div class="num">24 / 7</div><div class="lbl" data-en="Always Open" data-ne="सधैं खुला">Always Open</div></div>
+      <div><div class="num">M8GH+8X</div><div class="lbl" data-en="Kathmandu 44600" data-ne="काठमाडौं ४४६००">Kathmandu 44600</div></div>
+    </div>
+    <div class="hero-lang-toggle">
+      <button class="active" data-lang="en" aria-label="Switch to English">🇬🇧 English</button>
+      <button data-lang="ne" aria-label="Switch to Nepali">🇳🇵 नेपाली</button>
     </div>
   </div>
   <div class="sign-wrap">
@@ -91,9 +616,9 @@
         </g>
         <circle class="pour-drip" cx="60" cy="6" r="2.4" fill="#E8A33D"/>
       </svg>
-      <div class="word">OPEN</div>
-      <div class="word red">24 HRS</div>
-      <div class="caption">// never last call</div>
+      <div class="word" data-en="OPEN" data-ne="खुला">OPEN</div>
+      <div class="word red" data-en="24 HRS" data-ne="२४ घण्टा">24 HRS</div>
+      <div class="caption" data-en="// never last call" data-ne="// अन्तिम कल कहिल्यै छैन">// never last call</div>
     </div>
   </div>
 </section>
@@ -106,25 +631,25 @@
 </div>
 
 <section id="categories">
-  <div class="eyebrow reveal">// The Menu</div>
-  <h2 class="section-title reveal">Whatever's calling your name tonight.</h2>
-  <p class="section-sub reveal">A working price list to give you a sense of range — message us for the full catalogue and current stock.</p>
+  <div class="eyebrow reveal"><span data-en="// The Menu" data-ne="// मेनू">// The Menu</span></div>
+  <h2 class="section-title reveal"><span data-en="Whatever's calling your name tonight." data-ne="आज राति जे तपाईंको नाम बोलाउँछ।">Whatever's calling your name tonight.</span></h2>
+  <p class="section-sub reveal" data-en="A working price list to give you a sense of range — message us for the full catalogue and current stock." data-ne="कार्य मूल्य सूचीले तपाईंलाई दायराको अनुभव दिन्छ — पूर्ण क्याटलग र हालको स्टकको लागि हामीलाई सन्देश पठाउनुहोस्।">A working price list to give you a sense of range — message us for the full catalogue and current stock.</p>
 
   <div class="menu-tabs reveal">
-    <button class="tab-btn active" data-tab="whiskey">Whiskey</button>
-    <button class="tab-btn" data-tab="beer">Beer</button>
-    <button class="tab-btn" data-tab="wine">Wine</button>
-    <button class="tab-btn" data-tab="spirits">Spirits &amp; Mixers</button>
+    <button class="tab-btn active" data-tab="whiskey" data-en="Whiskey" data-ne="ह्विस्की">Whiskey</button>
+    <button class="tab-btn" data-tab="beer" data-en="Beer" data-ne="बियर">Beer</button>
+    <button class="tab-btn" data-tab="wine" data-en="Wine" data-ne="वाइन">Wine</button>
+    <button class="tab-btn" data-tab="spirits" data-en="Spirits &amp; Mixers" data-ne="स्पिरिट र मिक्सरहरू">Spirits &amp; Mixers</button>
   </div>
 
     <div class="notice-box" style="background: linear-gradient(135deg, #ff7f50 0%, #ff5252 100%); color: #fff; padding: 24px 28px; border-radius: 18px; text-align: center; margin: 28px 0; box-shadow: 0 18px 32px rgba(0, 0, 0, 0.12); position: relative; overflow: hidden;">
     <div style="position: absolute; top: -20px; right: -20px; width: 110px; height: 110px; background: rgba(255, 255, 255, 0.14); border-radius: 50%;"></div>
     <div style="position: absolute; bottom: -20px; left: -20px; width: 130px; height: 130px; background: rgba(255, 255, 255, 0.14); border-radius: 50%;"></div>
     <div style="position: relative; z-index: 1;">
-      <h1 class="">Browse the full menu.</h1>
-      <p style="font-size: 1.05rem; font-weight: 500; margin: 0 0 16px; line-height: 1.6;" class="section-copy">See every available drink, mixer, and snack in one place. Tap below to view the complete selection.</p>
+      <h1 class="" data-en="Browse the full menu." data-ne="पूर्ण मेनू ब्राउज गर्नुहोस्।">Browse the full menu.</h1>
+      <p style="font-size: 1.05rem; font-weight: 500; margin: 0 0 16px; line-height: 1.6;" class="section-copy" data-en="See every available drink, mixer, and snack in one place. Tap below to view the complete selection." data-ne="सबै उपलब्ध पेय, मिक्सर, र स्न्याकहरू एकै ठाउँमा हेर्नुहोस्। पूर्ण चयन हेर्न तल ट्याप गर्नुहोस्।">See every available drink, mixer, and snack in one place. Tap below to view the complete selection.</p>
       <a href="/menu.html" target="_blank" rel="noopener" class="btn" style="background: #fff; color: #111; text-decoration: none; padding: 12px 24px; border-radius: 999px; display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-family: 'SST', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);">
-        <img src="https://static.vecteezy.com/system/resources/previews/015/218/298/original/restaurant-menu-icon-outline-cafe-food-vector.jpg" alt="menu" style="width: 20px; height: 20px;"> Full Menu →
+        <img src="https://static.vecteezy.com/system/resources/previews/015/218/298/original/restaurant-menu-icon-outline-cafe-food-vector.jpg" alt="menu" style="width: 20px; height: 20px;"> <span data-en="Full Menu →" data-ne="पूर्ण मेनू →">Full Menu →</span>
       </a>
     </div>
   </div>
@@ -133,10 +658,10 @@
 
     <div class="menu-panel active" data-panel="whiskey">
       <div class="menu-item">
-        <span class="menu-badge">Popular</span>
+        <span class="menu-badge" data-en="Popular" data-ne="लोकप्रिय">Popular</span>
         <div class="menu-img"><img src="img/old durbar ceramic Nepali Whisky.jpg" alt="Old Durbar 15 Years Ceramic Edition" loading="lazy"></div>
         <div class="name">Old Durbar 15 Years</div>
-        <div class="desc">Ceramic collector's bottle, blended scotch whisky.</div>
+        <div class="desc" data-en="Ceramic collector's bottle, blended scotch whisky." data-ne="सिरेमिक कलेक्टरको बोतल, ब्लेन्डेड स्कच ह्विस्की।">Ceramic collector's bottle, blended scotch whisky.</div>
         <div class="menu-item-footer">
           <span class="price">NPR 4,500</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Old%20Durbar%2015%20Years%20(Ceramic)" target="_blank" aria-label="Order Old Durbar 15 Years on WhatsApp">
@@ -147,7 +672,7 @@
       <div class="menu-item">
         <div class="menu-img"><img src="img/Bandipur Blended Malt Scotch Whisky - 750ML.jpg" alt="Bandipur Blended Malt Scotch Whisky" loading="lazy"></div>
         <div class="name">Bandipur Blended Malt</div>
-        <div class="desc">Scotch whisky, matured and bottled in small batches.</div>
+        <div class="desc" data-en="Scotch whisky, matured and bottled in small batches." data-ne="स्कच ह्विस्की, सानो ब्याचमा परिपक्व र बोतल गरिएको।">Scotch whisky, matured and bottled in small batches.</div>
         <div class="menu-item-footer">
           <span class="price">NPR 3,200</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Bandipur%20Blended%20Malt%20Scotch%20Whisky" target="_blank" aria-label="Order Bandipur on WhatsApp">
@@ -158,7 +683,7 @@
       <div class="menu-item">
         <div class="menu-img"><img src="img/old durbar ceramic Nepali Whisky.jpg" alt="Old Durbar Black Chimney Reserve Whisky" loading="lazy"></div>
         <div class="name">Old Durbar Black Chimney</div>
-        <div class="desc">Blended reserve, finished in oloroso sherry barrels.</div>
+        <div class="desc" data-en="Blended reserve, finished in oloroso sherry barrels." data-ne="ब्लेन्डेड रिजर्भ, ओलोरोसो शेरी ब्यारेलमा समाप्त।">Blended reserve, finished in oloroso sherry barrels.</div>
         <div class="menu-item-footer">
           <span class="price">NPR 1,450</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Old%20Durbar%20Black%20Chimney" target="_blank" aria-label="Order Old Durbar Black Chimney on WhatsApp">
@@ -168,17 +693,17 @@
       </div>
       <div class="menu-more">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
-        <p>Looking for a specific label?<br>We carry more than what's shown here.</p>
-        <a class="btn btn-ghost btn-sm" href="https://wa.me/9768756185?text=Hi%2C%20do%20you%20have%20other%20whiskey%20labels%20available%3F" target="_blank">Ask on WhatsApp</a>
+        <p data-en="Looking for a specific label?" data-ne="विशिष्ट लेबल खोज्दै हुनुहुन्छ?"><br data-en="<br>" data-ne="<br>"><span data-en="We carry more than what's shown here." data-ne="हामी यहाँ देखाइएको भन्दा बढी बोक्छौं।">We carry more than what's shown here.</span></p>
+        <a class="btn btn-ghost btn-sm" href="https://wa.me/9768756185?text=Hi%2C%20do%20you%20have%20other%20whiskey%20labels%20available%3F" target="_blank" data-en="Ask on WhatsApp" data-ne="व्हाट्सएपमा सोध्नुहोस्">Ask on WhatsApp</a>
       </div>
     </div>
 
     <div class="menu-panel" data-panel="beer">
       <div class="menu-item">
-        <span class="menu-badge">Popular</span>
+        <span class="menu-badge" data-en="Popular" data-ne="लोकप्रिय">Popular</span>
         <div class="menu-img"><img src="img/Gorkha-Strong-Can-500ML.jpg" alt="Gorkha Strong Beer Can, 500ml" loading="lazy"></div>
         <div class="name">Gorkha Strong (Can)</div>
-        <div class="desc">500ml can, Nepal's bold local lager.</div>
+        <div class="desc" data-en="500ml can, Nepal's bold local lager." data-ne="५००ml क्यान, नेपालको बोल्ड स्थानीय लागर।">500ml can, Nepal's bold local lager.</div>
         <div class="menu-item-footer">
           <span class="price">NPR 320</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Gorkha%20Strong%20Can" target="_blank" aria-label="Order Gorkha Strong Can on WhatsApp">
@@ -189,7 +714,7 @@
       <div class="menu-item">
         <div class="menu-img"><img src="img/Gorkha Strong.png" alt="Gorkha Strong Beer Bottle" loading="lazy"></div>
         <div class="name">Gorkha Strong (Bottle)</div>
-        <div class="desc">650ml bottle, cold on delivery.</div>
+        <div class="desc" data-en="650ml bottle, cold on delivery." data-ne="६५०ml बोतल, डेलिभरीमा चिसो।">650ml bottle, cold on delivery.</div>
         <div class="menu-item-footer">
           <span class="price">NPR 350</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Gorkha%20Strong%20Bottle" target="_blank" aria-label="Order Gorkha Strong Bottle on WhatsApp">
@@ -200,7 +725,7 @@
       <div class="menu-item">
         <div class="menu-img"><img src="img/tuborg can.jpg" alt="Tuborg Green Beer Can" loading="lazy"></div>
         <div class="name">Tuborg Green (Can)</div>
-        <div class="desc">500ml can, crisp Danish-style lager.</div>
+        <div class="desc" data-en="500ml can, crisp Danish-style lager." data-ne="५००ml क्यान, क्रिस्प डेनिश-शैली लागर।">500ml can, crisp Danish-style lager.</div>
         <div class="menu-item-footer">
           <span class="price">NPR 340</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Tuborg%20Green%20Can" target="_blank" aria-label="Order Tuborg Can on WhatsApp">
@@ -211,7 +736,7 @@
       <div class="menu-item">
         <div class="menu-img"><img src="img/Tubirg.jpg" alt="Tuborg Green Beer Bottle" loading="lazy"></div>
         <div class="name">Tuborg Green (Bottle)</div>
-        <div class="desc">650ml bottle, delivered cold.</div>
+        <div class="desc" data-en="650ml bottle, delivered cold." data-ne="६५०ml बोतल, चिसो डेलिभर गरियो।">650ml bottle, delivered cold.</div>
         <div class="menu-item-footer">
           <span class="price">NPR 380</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Tuborg%20Green%20Bottle" target="_blank" aria-label="Order Tuborg Bottle on WhatsApp">
@@ -222,7 +747,7 @@
       <div class="menu-item">
         <div class="menu-img"><img src="img/Kingfisher_Premium_Beer_From_India.jpg" alt="Kingfisher Premium Beer" loading="lazy"></div>
         <div class="name">Kingfisher Premium</div>
-        <div class="desc">330ml bottle, imported from India.</div>
+        <div class="desc" data-en="330ml bottle, imported from India." data-ne="३३०ml बोतल, भारतबाट आयातित।">330ml bottle, imported from India.</div>
         <div class="menu-item-footer">
           <span class="price">NPR 400</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Kingfisher%20Premium" target="_blank" aria-label="Order Kingfisher Premium on WhatsApp">
@@ -232,8 +757,8 @@
       </div>
       <div class="menu-more">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
-        <p>Ordering for a group?<br>Ask about mixed crates and case pricing.</p>
-        <a class="btn btn-ghost btn-sm" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20a%20mixed%20beer%20crate%20for%20a%20group" target="_blank">Ask on WhatsApp</a>
+        <p data-en="Ordering for a group?" data-ne="समूहको लागि अर्डर गर्दै हुनुहुन्छ?"><br><span data-en="Ask about mixed crates and case pricing." data-ne="मिश्रित क्रेट र केस मूल्यको बारेमा सोध्नुहोस्।">Ask about mixed crates and case pricing.</span></p>
+        <a class="btn btn-ghost btn-sm" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20a%20mixed%20beer%20crate%20for%20a%20group" target="_blank" data-en="Ask on WhatsApp" data-ne="व्हाट्सएपमा सोध्नुहोस्">Ask on WhatsApp</a>
       </div>
     </div>
 
@@ -241,7 +766,7 @@
       <div class="menu-item">
         <div class="menu-img"><img src="img/Manag Valley.jpg" alt="Manang Valley Premium Wine" loading="lazy"></div>
         <div class="name">Manang Valley Premium</div>
-        <div class="desc">Light, food-friendly white — locally produced.</div>
+        <div class="desc" data-en="Light, food-friendly white — locally produced." data-ne="हल्का, खाना-मैत्री सेतो — स्थानीय रूपमा उत्पादित।">Light, food-friendly white — locally produced.</div>
         <div class="menu-item-footer">
           <span class="price">NPR 2,800</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Manang%20Valley%20Premium%20Wine" target="_blank" aria-label="Order Manang Valley wine on WhatsApp">
@@ -250,10 +775,10 @@
         </div>
       </div>
       <div class="menu-item">
-        <span class="menu-badge">Popular</span>
+        <span class="menu-badge" data-en="Popular" data-ne="लोकप्रिय">Popular</span>
         <div class="menu-img"><img src="img/Robertson-Winery-Natural-Sweet-Red-750ML.jpg" alt="Robertson Winery Natural Sweet Red" loading="lazy"></div>
         <div class="name">Robertson Natural Sweet Red</div>
-        <div class="desc">750ml, smooth and sweet — a dinner favorite.</div>
+        <div class="desc" data-en="750ml, smooth and sweet — a dinner favorite." data-ne="७५०ml, चिल्लो र मीठो — डिनरको मनपर्ने।">750ml, smooth and sweet — a dinner favorite.</div>
         <div class="menu-item-footer">
           <span class="price">NPR 3,200</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Robertson%20Natural%20Sweet%20Red" target="_blank" aria-label="Order Robertson wine on WhatsApp">
@@ -263,8 +788,8 @@
       </div>
       <div class="menu-more">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
-        <p>Want something sparkling or a specific vintage?<br>Message us your preference.</p>
-        <a class="btn btn-ghost btn-sm" href="https://wa.me/9768756185?text=Hi%2C%20do%20you%20have%20sparkling%20wine%20available%3F" target="_blank">Ask on WhatsApp</a>
+        <p data-en="Want something sparkling or a specific vintage?" data-ne="केही स्पार्कलिङ वा विशिष्ट भिन्टेज चाहनुहुन्छ?"><br><span data-en="Message us your preference." data-ne="हामीलाई तपाईंको प्राथमिकता सन्देश पठाउनुहोस्।">Message us your preference.</span></p>
+        <a class="btn btn-ghost btn-sm" href="https://wa.me/9768756185?text=Hi%2C%20do%20you%20have%20sparkling%20wine%20available%3F" target="_blank" data-en="Ask on WhatsApp" data-ne="व्हाट्सएपमा सोध्नुहोस्">Ask on WhatsApp</a>
       </div>
     </div>
 
@@ -272,7 +797,7 @@
       <div class="menu-item">
         <div class="menu-img"><img src="img/Votka.jpg" alt="Vodka bottle" loading="lazy"></div>
         <div class="name">Vodka (750ml)</div>
-        <div class="desc">Local and imported options available.</div>
+        <div class="desc" data-en="Local and imported options available." data-ne="स्थानीय र आयातित विकल्पहरू उपलब्ध।">Local and imported options available.</div>
         <div class="menu-item-footer">
           <span class="price">From NPR 1,500</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Vodka" target="_blank" aria-label="Order Vodka on WhatsApp">
@@ -283,7 +808,7 @@
       <div class="menu-item">
         <div class="menu-img"><img src="img/rum.jpg" alt="Rum bottle" loading="lazy"></div>
         <div class="name">Rum (750ml)</div>
-        <div class="desc">Dark and white, spiced on request.</div>
+        <div class="desc" data-en="Dark and white, spiced on request." data-ne="गाढा र सेतो, अनुरोधमा मसालेदार।">Dark and white, spiced on request.</div>
         <div class="menu-item-footer">
           <span class="price">From NPR 1,400</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Rum" target="_blank" aria-label="Order Rum on WhatsApp">
@@ -294,7 +819,7 @@
       <div class="menu-item">
         <div class="menu-img"><img src="img/gin.jpg" alt="Gin bottle" loading="lazy"></div>
         <div class="name">Gin (750ml)</div>
-        <div class="desc">London dry and local craft options.</div>
+        <div class="desc" data-en="London dry and local craft options." data-ne="लन्डन ड्राई र स्थानीय क्राफ्ट विकल्पहरू।">London dry and local craft options.</div>
         <div class="menu-item-footer">
           <span class="price">From NPR 2,000</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20Gin" target="_blank" aria-label="Order Gin on WhatsApp">
@@ -304,8 +829,8 @@
       </div>
       <div class="menu-item">
         <div class="menu-img"><img src="img/cola4.jpg" alt="Mixers and soda" loading="lazy"></div>
-        <div class="name">Mixers &amp; Soda</div>
-        <div class="desc">Tonic, cola, soda water, juice.</div>
+        <div class="name" data-en="Mixers &amp; Soda" data-ne="मिक्सर र सोडा">Mixers &amp; Soda</div>
+        <div class="desc" data-en="Tonic, cola, soda water, juice." data-ne="टोनिक, कोला, सोडा पानी, जुस।">Tonic, cola, soda water, juice.</div>
         <div class="menu-item-footer">
           <span class="price">From NPR 120</span>
           <a class="order-btn" href="https://wa.me/9768756185?text=Hi%2C%20I%27d%20like%20to%20order%20mixers" target="_blank" aria-label="Order mixers on WhatsApp">
@@ -316,79 +841,79 @@
     </div>
 
   </div>
-  <p class="menu-note reveal">// Product photos are for reference — prices and stock can change. Confirm your total on WhatsApp before we dispatch.</p>
+  <p class="menu-note reveal" data-en="// Product photos are for reference — prices and stock can change. Confirm your total on WhatsApp before we dispatch." data-ne="// उत्पादन फोटोहरू सन्दर्भको लागि मात्र हुन् — मूल्य र स्टक परिवर्तन हुन सक्छ। हामी पठाउनु अघि व्हाट्सएपमा तपाईंको कुल पुष्टि गर्नुहोस्।">// Product photos are for reference — prices and stock can change. Confirm your total on WhatsApp before we dispatch.</p>
 
 </section>
 
 
 <section>
-  <div class="eyebrow reveal">// Why People Order From Us</div>
-  <h2 class="section-title reveal">Built for the hours other shops are closed.</h2>
+  <div class="eyebrow reveal"><span data-en="// Why People Order From Us" data-ne="// मानिसहरूले हामीबाट किन अर्डर गर्छन्">// Why People Order From Us</span></div>
+  <h2 class="section-title reveal"><span data-en="Built for the hours other shops are closed." data-ne="अरू पसलहरू बन्द हुँदाको घण्टाको लागि निर्मित।">Built for the hours other shops are closed.</span></h2>
   <div class="trust-strip reveal">
     <div class="trust-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4M12 3l7 4v5c0 5-3.5 8.5-7 9-3.5-.5-7-4-7-9V7l7-4z"/></svg>
-      <div><h4>Licensed &amp; verified</h4><p>Operating as a registered delivery service in Kathmandu.</p></div>
+      <div><h4 data-en="Licensed &amp; verified" data-ne="इजाजतपत्र प्राप्त र प्रमाणित">Licensed &amp; verified</h4><p data-en="Operating as a registered delivery service in Kathmandu." data-ne="काठमाडौंमा दर्ता गरिएको डेलिभरी सेवाको रूपमा सञ्चालन।">Operating as a registered delivery service in Kathmandu.</p></div>
     </div>
     <div class="trust-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1 3-6z"/></svg>
-      <div><h4>ID checked on delivery</h4><p>Riders confirm you're of legal drinking age at the door.</p></div>
+      <div><h4 data-en="ID checked on delivery" data-ne="डेलिभरीमा आईडी जाँच">ID checked on delivery</h4><p data-en="Riders confirm you're of legal drinking age at the door." data-ne="राइडरहरूले ढोकामा तपाईं कानुनी पिउने उमेरको हुनुहुन्छ भनी पुष्टि गर्छन्।">Riders confirm you're of legal drinking age at the door.</p></div>
     </div>
     <div class="trust-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-      <div><h4>~25 min response</h4><p>Average time from message sent to order confirmed.</p></div>
+      <div><h4 data-en="~25 min response" data-ne="~२५ मिनेट प्रतिक्रिया">~25 min response</h4><p data-en="Average time from message sent to order confirmed." data-ne="सन्देश पठाएदेखि अर्डर पुष्टि हुँदासम्मको औसत समय।">Average time from message sent to order confirmed.</p></div>
     </div>
     <div class="trust-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg>
-      <div><h4>Cash or digital</h4><p>Pay on delivery, in cash or by wallet transfer.</p></div>
+      <div><h4 data-en="Cash or digital" data-ne="नगद वा डिजिटल">Cash or digital</h4><p data-en="Pay on delivery, in cash or by wallet transfer." data-ne="डेलिभरीमा भुक्तान गर्नुहोस्, नगद वा वालिट ट्रान्सफरद्वारा।">Pay on delivery, in cash or by wallet transfer.</p></div>
     </div>
   </div>
   
 </section>
 
 <section id="how">
-  <div class="eyebrow reveal">// How It Works</div>
-  <h2 class="section-title reveal">Three steps between you and your order.</h2>
+  <div class="eyebrow reveal"><span data-en="// How It Works" data-ne="// यसले कसरी काम गर्दछ">// How It Works</span></div>
+  <h2 class="section-title reveal"><span data-en="Three steps between you and your order." data-ne="तपाईं र तपाईंको अर्डर बीच तीन चरणहरू।">Three steps between you and your order.</span></h2>
   <div class="steps">
     <div class="step reveal">
       <div class="n mono">01</div>
-      <h3>Message or call</h3>
-      <p>Send your order over WhatsApp or call us directly. Tell us what you want and where you are.</p>
+      <h3 data-en="Message or call" data-ne="सन्देश वा फोन गर्नुहोस्">Message or call</h3>
+      <p data-en="Send your order over WhatsApp or call us directly. Tell us what you want and where you are." data-ne="व्हाट्सएपमा आफ्नो अर्डर पठाउनुहोस् वा हामीलाई सीधै कल गर्नुहोस्। तपाईं के चाहनुहुन्छ र कहाँ हुनुहुन्छ भनी हामीलाई बताउनुहोस्।">Send your order over WhatsApp or call us directly. Tell us what you want and where you are.</p>
     </div>
     <div class="step reveal">
       <div class="n mono">02</div>
-      <h3>We confirm</h3>
-      <p>We confirm your order, price, and delivery time — usually within minutes, any hour of the day.</p>
+      <h3 data-en="We confirm" data-ne="हामी पुष्टि गर्छौं">We confirm</h3>
+      <p data-en="We confirm your order, price, and delivery time — usually within minutes, any hour of the day." data-ne="हामी तपाईंको अर्डर, मूल्य, र डेलिभरी समय पुष्टि गर्छौं — सामान्यतया मिनेट भित्र, दिनको कुनै पनि घण्टा।">We confirm your order, price, and delivery time — usually within minutes, any hour of the day.</p>
     </div>
     <div class="step reveal">
       <div class="n mono">03</div>
-      <h3>It arrives</h3>
-      <p>Our rider brings it straight to your door within Kathmandu. Pay on delivery.</p>
+      <h3 data-en="It arrives" data-ne="यो आइपुग्छ">It arrives</h3>
+      <p data-en="Our rider brings it straight to your door within Kathmandu. Pay on delivery." data-ne="हाम्रो राइडरले यसलाई काठमाडौं भित्र तपाईंको ढोकामा सीधा ल्याउँछ। डेलिभरीमा भुक्तान गर्नुहोस्।">Our rider brings it straight to your door within Kathmandu. Pay on delivery.</p>
     </div>
   </div>
 </section>
 
 <section id="reviews">
-  <div class="eyebrow reveal">// What People Say</div>
-  <h2 class="section-title reveal">Kathmandu's highest-rated delivery service.</h2>
+  <div class="eyebrow reveal"><span data-en="// What People Say" data-ne="// मानिसहरू के भन्छन्">// What People Say</span></div>
+  <h2 class="section-title reveal"><span data-en="Kathmandu's highest-rated delivery service." data-ne="काठमाडौंको सबैभन्दा उच्च मूल्याङ्कन गरिएको डेलिभरी सेवा।">Kathmandu's highest-rated delivery service.</span></h2>
   <div class="review-panel reveal">
     <div>
       <div class="rating-big">4.9</div>
       <div class="stars">★★★★★</div>
-      <div class="count">Based on 118 Google reviews</div>
+      <div class="count" data-en="Based on 118 Google reviews" data-ne="११८ गुगल समीक्षाहरूमा आधारित">Based on 118 Google reviews</div>
     </div>
     <div>
       <div class="carousel">
         <div class="carousel-slide active">
-          <p class="quote">"Fast, reliable, and open even at 2am when nowhere else is. Rocksee Nepal has become our go-to for last-minute orders."</p>
-          <div class="quote-author">— Verified Google review</div>
+          <p class="quote" data-en="\"Fast, reliable, and open even at 2am when nowhere else is. Rocksee Nepal has become our go-to for last-minute orders.\"" data-ne="\"छिटो, भरपर्दो, र २ बजे पनि खुला जब अरू कतै छैन। रक्सी नेपाल हाम्रो अन्तिम-मिनेट अर्डरको लागि पहिलो रोजाइ बनेको छ।\"">"Fast, reliable, and open even at 2am when nowhere else is. Rocksee Nepal has become our go-to for last-minute orders."</p>
+          <div class="quote-author" data-en="— Verified Google review" data-ne="— प्रमाणित गुगल समीक्षा">— Verified Google review</div>
         </div>
         <div class="carousel-slide">
-          <p class="quote">"Ordered on WhatsApp, got a confirmation in minutes, and the rider found our place with no trouble at all."</p>
-          <div class="quote-author">— Verified Google review</div>
+          <p class="quote" data-en="\"Ordered on WhatsApp, got a confirmation in minutes, and the rider found our place with no trouble at all.\"" data-ne="\"व्हाट्सएपमा अर्डर गर्यो, मिनेटमा पुष्टि पायो, र राइडरले हाम्रो ठाउँ कुनै समस्या बिना फेला पार्यो।\"">"Ordered on WhatsApp, got a confirmation in minutes, and the rider found our place with no trouble at all."</p>
+          <div class="quote-author" data-en="— Verified Google review" data-ne="— प्रमाणित गुगल समीक्षा">— Verified Google review</div>
         </div>
         <div class="carousel-slide">
-          <p class="quote">"Good prices, cold beer, and they actually checked ID at the door. Exactly what a delivery service should be."</p>
-          <div class="quote-author">— Verified Google review</div>
+          <p class="quote" data-en="\"Good prices, cold beer, and they actually checked ID at the door. Exactly what a delivery service should be.\"" data-ne="\"राम्रो मूल्य, चिसो बियर, र तिनीहरूले वास्तवमा ढोकामा आईडी जाँच गरे। डेलिभरी सेवा जस्तो हुनुपर्छ त्यस्तै।\"">"Good prices, cold beer, and they actually checked ID at the door. Exactly what a delivery service should be."</p>
+          <div class="quote-author" data-en="— Verified Google review" data-ne="— प्रमाणित गुगल समीक्षा">— Verified Google review</div>
         </div>
       </div>
       <div class="carousel-dots">
@@ -401,75 +926,75 @@
 </section>
 
 <section id="delivery">
-  <div class="eyebrow reveal">// The Details</div>
-  <h2 class="section-title reveal">Hours, location, and how to reach us.</h2>
+  <div class="eyebrow reveal"><span data-en="// The Details" data-ne="// विवरणहरू">// The Details</span></div>
+  <h2 class="section-title reveal"><span data-en="Hours, location, and how to reach us." data-ne="घण्टा, स्थान, र हामीसम्म कसरी पुग्ने।">Hours, location, and how to reach us.</span></h2>
   <div class="info-grid reveal">
     <div class="info-card">
-      <h3>Hours &amp; Contact</h3>
+      <h3 data-en="Hours &amp; Contact" data-ne="घण्टा र सम्पर्क">Hours &amp; Contact</h3>
       <ul>
-        <li><span>Hours</span><span>Open 24 Hours</span></li>
-        <li><span>Phone</span><span>976-8756185</span></li>
-        <li><span>Website</span><span>rockseenepal.com</span></li>
-        <li><span>Instagram</span><span>@rockseenepal</span></li>
+        <li><span data-en="Hours" data-ne="घण्टा">Hours</span><span data-en="Open 24 Hours" data-ne="२४ घण्टा खुला">Open 24 Hours</span></li>
+        <li><span data-en="Phone" data-ne="फोन">Phone</span><span>976-8756185</span></li>
+        <li><span data-en="Website" data-ne="वेबसाइट">Website</span><span>rockseenepal.com</span></li>
+        <li><span data-en="Instagram" data-ne="इन्स्टाग्राम">Instagram</span><span>@rockseenepal</span></li>
       </ul>
     </div>
     <div class="info-card">
-      <h3>Delivery Zones</h3>
-      <p style="color:var(--muted); font-size:0.9rem; margin-bottom:6px;">Currently covering central Kathmandu, including:</p>
+      <h3 data-en="Delivery Zones" data-ne="डेलिभरी क्षेत्रहरू">Delivery Zones</h3>
+      <p style="color:var(--muted); font-size:0.9rem; margin-bottom:6px;" data-en="Currently covering central Kathmandu, including:" data-ne="हाल केन्द्रीय काठमाडौं कभर गर्दै, सहित:">Currently covering central Kathmandu, including:</p>
       <div class="zone-chips">
         <span>Kathmandu 44600</span>
         <span>New Baneshwor</span>
         <span>Thamel</span>
         <span>Lazimpat</span>
         <span>Koteshwor</span>
-        <span>Ask about your area</span>
+        <span data-en="Ask about your area" data-ne="तपाईंको क्षेत्रको बारेमा सोध्नुहोस्">Ask about your area</span>
       </div>
     </div>
   </div>
 </section>
 
 <section id="faq">
-  <div class="eyebrow reveal">// Good To Know</div>
-  <h2 class="section-title reveal">Frequently asked questions.</h2>
+  <div class="eyebrow reveal"><span data-en="// Good To Know" data-ne="// जान्न राम्रो">// Good To Know</span></div>
+  <h2 class="section-title reveal"><span data-en="Frequently asked questions." data-ne="बारम्बार सोधिने प्रश्नहरू।">Frequently asked questions.</span></h2>
   <div class="faq reveal">
     <details open>
-      <summary>How do I place an order? <span class="plus">+</span></summary>
-      <p class="faq-a">Message us on WhatsApp or call 976-8756185 with what you'd like and your delivery address. We'll confirm the price and estimated time before dispatching.</p>
+      <summary><span data-en="How do I place an order?" data-ne="म कसरी अर्डर गर्छु?">How do I place an order?</span> <span class="plus">+</span></summary>
+      <p class="faq-a" data-en="Message us on WhatsApp or call 976-8756185 with what you'd like and your delivery address. We'll confirm the price and estimated time before dispatching." data-ne="हामीलाई व्हाट्सएपमा सन्देश पठाउनुहोस् वा ९७६-८७५६१८५ मा फोन गर्नुहोस् तपाईं के चाहनुहुन्छ र तपाईंको डेलिभरी ठेगाना सहित। हामी पठाउनु अघि मूल्य र अनुमानित समय पुष्टि गर्नेछौं।">Message us on WhatsApp or call 976-8756185 with what you'd like and your delivery address. We'll confirm the price and estimated time before dispatching.</p>
     </details>
     <details>
-      <summary>Do you check ID on delivery? <span class="plus">+</span></summary>
-      <p class="faq-a">Yes. Our riders may ask for identification to confirm you're of legal drinking age in Nepal before handing over your order.</p>
+      <summary><span data-en="Do you check ID on delivery?" data-ne="के तपाईं डेलिभरीमा आईडी जाँच गर्नुहुन्छ?">Do you check ID on delivery?</span> <span class="plus">+</span></summary>
+      <p class="faq-a" data-en="Yes. Our riders may ask for identification to confirm you're of legal drinking age in Nepal before handing over your order." data-ne="हो। हाम्रा राइडरहरूले तपाईंको अर्डर सुम्पनु अघि नेपालको कानुनी पिउने उमेरको हुनुहुन्छ भनी पुष्टि गर्न परिचयपत्र माग्न सक्छन्।">Yes. Our riders may ask for identification to confirm you're of legal drinking age in Nepal before handing over your order.</p>
     </details>
     <details>
-      <summary>What areas do you deliver to? <span class="plus">+</span></summary>
-      <p class="faq-a">We currently cover central Kathmandu, including the 44600 area and nearby neighborhoods. Message us your location and we'll confirm if we can reach you.</p>
+      <summary><span data-en="What areas do you deliver to?" data-ne="तपाईं कुन क्षेत्रमा डेलिभरी गर्नुहुन्छ?">What areas do you deliver to?</span> <span class="plus">+</span></summary>
+      <p class="faq-a" data-en="We currently cover central Kathmandu, including the 44600 area and nearby neighborhoods. Message us your location and we'll confirm if we can reach you." data-ne="हामी हाल केन्द्रीय काठमाडौं कभर गर्दछौं, ४४६०० क्षेत्र र नजिकका छिमेकहरू सहित। हामीलाई तपाईंको स्थान सन्देश पठाउनुहोस् र हामी तपाईंसम्म पुग्न सक्छौं भनेर पुष्टि गर्नेछौं।">We currently cover central Kathmandu, including the 44600 area and nearby neighborhoods. Message us your location and we'll confirm if we can reach you.</p>
     </details>
     <details>
-      <summary>How do I pay? <span class="plus">+</span></summary>
-      <p class="faq-a">Cash on delivery or digital wallet transfer — whichever is easier for you. We'll confirm the total before your order leaves.</p>
+      <summary><span data-en="How do I pay?" data-ne="म कसरी भुक्तान गर्छु?">How do I pay?</span> <span class="plus">+</span></summary>
+      <p class="faq-a" data-en="Cash on delivery or digital wallet transfer — whichever is easier for you. We'll confirm the total before your order leaves." data-ne="डेलिभरीमा नगद वा डिजिटल वालिट ट्रान्सफर — जुन तपाईंलाई सजिलो हुन्छ। हामी तपाईंको अर्डर पठाउनु अघि कुल पुष्टि गर्नेछौं।">Cash on delivery or digital wallet transfer — whichever is easier for you. We'll confirm the total before your order leaves.</p>
     </details>
     <details>
-      <summary>Are you really open 24 hours? <span class="plus">+</span></summary>
-      <p class="faq-a">Yes, every day of the week. Late-night and early-morning orders are some of the most common ones we get.</p>
+      <summary><span data-en="Are you really open 24 hours?" data-ne="के तपाईं साँच्चै २४ घण्टा खुला हुनुहुन्छ?">Are you really open 24 hours?</span> <span class="plus">+</span></summary>
+      <p class="faq-a" data-en="Yes, every day of the week. Late-night and early-morning orders are some of the most common ones we get." data-ne="हो, हप्ताको हरेक दिन। राती र बिहानैको अर्डर हामीले पाउने सबैभन्दा सामान्य अर्डरहरू हुन्।">Yes, every day of the week. Late-night and early-morning orders are some of the most common ones we get.</p>
     </details>
   </div>
 </section>
 
 <section class="cta-band" id="order">
-  <div class="eyebrow reveal" style="justify-content:center; display:flex;">// Ready When You Are</div>
-  <h2 class="display reveal">It's always the<br><span class="amber">right hour</span> somewhere.</h2>
+  <div class="eyebrow reveal" style="justify-content:center; display:flex;"><span data-en="// Ready When You Are" data-ne="// जब तपाईं तयार हुनुहुन्छ">// Ready When You Are</span></div>
+  <h2 class="display reveal"><span data-en="It's always the" data-ne="यो सधैं हो">It's always the</span><br><span class="amber"><span data-en="right hour" data-ne="सही घण्टा">right hour</span></span> <span data-en="somewhere." data-ne="कतै।">somewhere.</span></h2>
   <div class="hero-ctas reveal" style="justify-content:center;">
-    <a class="btn btn-primary" href="https://wa.me/9768756185" target="_blank">Order on WhatsApp</a>
-    <a class="btn btn-ghost" href="tel:9768756185">Call 976-8756185</a>
+    <a class="btn btn-primary" href="https://wa.me/9768756185" target="_blank" data-en="Order on WhatsApp" data-ne="व्हाट्सएपमा अर्डर गर्नुहोस्">Order on WhatsApp</a>
+    <a class="btn btn-ghost" href="tel:9768756185" data-en="Call 976-8756185" data-ne="फोन गर्नुहोस् ९७६-८७५६१८५">Call 976-8756185</a>
   </div>
 </section>
 
-<p class="disclaimer">Rocksee Nepal is a licensed alcohol delivery service. We deliver only to customers of legal drinking age in Nepal and reserve the right to request ID upon delivery. Please drink responsibly.</p>
+<p class="disclaimer" data-en="Rocksee Nepal is a licensed alcohol delivery service. We deliver only to customers of legal drinking age in Nepal and reserve the right to request ID upon delivery. Please drink responsibly." data-ne="रक्सी नेपाल एक इजाजतपत्र प्राप्त मदिरा वितरण सेवा हो। हामी नेपालको कानुनी पिउने उमेरका ग्राहकहरूलाई मात्र डेलिभरी गर्छौं र डेलिभरीमा आईडी माग गर्ने अधिकार सुरक्षित राख्छौं। कृपया जिम्मेवारीपूर्वक पिउनुहोस्।">Rocksee Nepal is a licensed alcohol delivery service. We deliver only to customers of legal drinking age in Nepal and reserve the right to request ID upon delivery. Please drink responsibly.</p>
 
 <footer>
-  <div>© <span id="year"></span> Rocksee Nepal. All rights reserved.</div>
+  <div>© <span id="year"></span> Rocksee Nepal. <span data-en="All rights reserved." data-ne="सबै अधिकार सुरक्षित।">All rights reserved.</span></div>
   <div><a href="https://www.instagram.com/rockseenepal/" target="_blank">Instagram</a> &nbsp;·&nbsp; <a href="tel:9768756185">976-8756185</a> &nbsp;·&nbsp; Kathmandu 44600</div>
-  <div style="margin-top:0.5rem; font-size:0.85rem; opacity:0.8;">Design by: <a href="https://subashdhami.com.np" target="_blank">subashdhami.com.np</a></div>
+  <div style="margin-top:0.5rem; font-size:0.85rem; opacity:0.8;"><span data-en="Design by:" data-ne="डिजाइन:">Design by:</span> <a href="https://subashdhami.com.np" target="_blank">subashdhami.com.np</a></div>
 </footer>
 
 <a class="wa-float" href="https://wa.me/9768756185" target="_blank" aria-label="Order on WhatsApp">
@@ -477,12 +1002,208 @@
 </a>
 
 <div class="sticky-order" id="stickyOrder">
-  <div class="txt"><b>Ready to order?</b>Open 24 hours across Kathmandu.</div>
-  <a class="btn btn-primary btn-sm" href="https://wa.me/9768756185" target="_blank">WhatsApp</a>
+  <div class="txt"><b data-en="Ready to order?" data-ne="अर्डर गर्न तयार हुनुहुन्छ?">Ready to order?</b><span data-en="Open 24 hours across Kathmandu." data-ne="काठमाडौंभरि २४ घण्टा खुला।">Open 24 hours across Kathmandu.</span></div>
+  <a class="btn btn-primary btn-sm" href="https://wa.me/9768756185" target="_blank" data-en="WhatsApp" data-ne="व्हाट्सएप">WhatsApp</a>
 </div>
 
 </div>
 
-<script src="script.js"></script>
+<script>
+// Set current year in footer
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* =========================================================
+   LANGUAGE TOGGLE
+   ========================================================= */
+let currentLang = 'en';
+
+function setLanguage(lang) {
+  currentLang = lang;
+  
+  // Update all elements with data-en and data-ne attributes
+  document.querySelectorAll('[data-en][data-ne]').forEach(el => {
+    el.textContent = el.getAttribute('data-' + lang);
+  });
+  
+  // Update all elements with data-en and data-ne that have HTML content (like <br> tags)
+  document.querySelectorAll('[data-en][data-ne]').forEach(el => {
+    // For elements that might contain HTML, use innerHTML
+    // But we only set textContent for safety - if HTML is needed, handle separately
+  });
+  
+  // Update buttons specifically
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    if (btn.dataset.en && btn.dataset.ne) {
+      btn.textContent = btn.dataset[lang];
+    }
+  });
+  
+  // Update language toggle button text
+  const toggleBtn = document.getElementById('langToggle');
+  if (lang === 'en') {
+    toggleBtn.textContent = '🇳🇵 नेपाली';
+  } else {
+    toggleBtn.textContent = '🇬🇧 English';
+  }
+  
+  // Update hero language buttons
+  document.querySelectorAll('.hero-lang-toggle button').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+  
+  // Update meta tags if needed
+  const titleEl = document.querySelector('title');
+  if (lang === 'ne') {
+    titleEl.textContent = 'रक्सी नेपाल — २४ घण्टा मदिरा वितरण, काठमाडौं';
+  } else {
+    titleEl.textContent = 'Rocksee Nepal — 24-Hour Liquor Delivery, Kathmandu';
+  }
+  
+  // Store preference
+  localStorage.setItem('rocksee-lang', lang);
+}
+
+// Language toggle button in header
+document.getElementById('langToggle').addEventListener('click', function() {
+  const newLang = currentLang === 'en' ? 'ne' : 'en';
+  setLanguage(newLang);
+});
+
+// Hero language buttons
+document.querySelectorAll('.hero-lang-toggle button').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const lang = this.dataset.lang;
+    setLanguage(lang);
+  });
+});
+
+// Check for saved language preference
+const savedLang = localStorage.getItem('rocksee-lang');
+if (savedLang && (savedLang === 'en' || savedLang === 'ne')) {
+  setLanguage(savedLang);
+}
+
+/* ---------- Age gate ---------- */
+function enterSite(){
+  document.getElementById('agegate').style.display = 'none';
+  document.getElementById('site').style.display = 'block';
+  document.body.classList.remove('locked');
+  initSite();
+}
+
+/* ---------- Everything below only runs once the visitor is inside ---------- */
+function initSite(){
+
+  /* Mobile menu toggle */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if(hamburger && mobileMenu){
+    hamburger.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('open');
+      document.body.classList.toggle('menu-open', open);
+      hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        document.body.classList.remove('menu-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  /* Active nav link tracking */
+  const navLinks = document.querySelectorAll('nav a[href^="#"]');
+  const sections = Array.from(navLinks)
+    .map(link => document.querySelector(link.getAttribute('href')))
+    .filter(Boolean);
+
+  if('IntersectionObserver' in window && sections.length){
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          const id = '#' + entry.target.id;
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === id);
+          });
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+
+    sections.forEach(section => navObserver.observe(section));
+  }
+
+  /* Scroll-reveal animations */
+  const revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && revealEls.length){
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => revealObserver.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('in'));
+  }
+
+  /* Menu category tabs */
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.menu-panel');
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab;
+      tabButtons.forEach(b => b.classList.toggle('active', b === btn));
+      panels.forEach(p => p.classList.toggle('active', p.dataset.panel === target));
+    });
+  });
+
+  /* Testimonial carousel */
+  const slides = document.querySelectorAll('.carousel-slide');
+  const dots = document.querySelectorAll('.carousel-dots button');
+  let current = 0;
+  let carouselTimer;
+
+  function showSlide(i){
+    current = i;
+    slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+    dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+  }
+  function nextSlide(){
+    showSlide((current + 1) % slides.length);
+  }
+  function startCarousel(){
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(slides.length > 1 && !reduceMotion){
+      carouselTimer = setInterval(nextSlide, 5000);
+    }
+  }
+  dots.forEach((dot, idx) => {
+    dot.addEventListener('click', () => {
+      clearInterval(carouselTimer);
+      showSlide(idx);
+      startCarousel();
+    });
+  });
+  if(slides.length){
+    showSlide(0);
+    startCarousel();
+  }
+
+  /* Sticky mobile order bar: show after hero, hide near the very bottom */
+  const stickyBar = document.getElementById('stickyOrder');
+  const hero = document.querySelector('.hero');
+  if(stickyBar && hero){
+    const heroHeight = hero.offsetHeight;
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const nearBottom = (window.innerHeight + scrolled) >= document.body.scrollHeight - 80;
+      stickyBar.classList.toggle('show', scrolled > heroHeight * 0.6 && !nearBottom);
+    }, { passive: true });
+  }
+}
+</script>
 </body>
 </html>
